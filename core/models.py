@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class Region(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
+
+
 class Province(models.Model):
     TYPE_CITY = 'C'         # Thành Phố trực thuộc TW
     TYPE_PROVINCE = 'P'     # Tỉnh
@@ -14,16 +24,25 @@ class Province(models.Model):
     region = models.CharField(max_length=255)
     type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, default=TYPE_PROVINCE)
+    region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name='provinces')
+
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
 
 
 class District(models.Model):
-    TYPE_CITY = 'C'         # City - Thành phố trực thuộc tỉnh/thành phố
-    TYPE_DISTRICT = 'D'     # District - Quận hoặc Huyện
-    TYPE_TOWN = 'T'         # Town - Thị xã
+    TYPE_CITY = 'C'                 # City - Thành phố trực thuộc tỉnh/thành phố
+    TYPE_URBAN_DISTRICT = 'UD'       # Urban District - Quận
+    TYPE_RURAL_DISTRICT = 'RD'       # Rural District - Huyện
+    TYPE_TOWN = 'T'                 # Town - Thị xã
 
     TYPE_CHOICES = [
         (TYPE_CITY, 'City'),
-        (TYPE_DISTRICT, 'District'),
+        (TYPE_URBAN_DISTRICT, 'Urban District'),
+        (TYPE_RURAL_DISTRICT, 'Rural District'),
         (TYPE_TOWN, 'Town')
     ]
 
@@ -31,7 +50,13 @@ class District(models.Model):
     province = models.ForeignKey(
         Province, on_delete=models.PROTECT, related_name='districts')
     type = models.CharField(
-        max_length=1, choices=TYPE_CHOICES, default=TYPE_DISTRICT)
+        max_length=2, choices=TYPE_CHOICES, default=TYPE_URBAN_DISTRICT)
+
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
 
 
 class Ward(models.Model):
@@ -48,3 +73,9 @@ class Ward(models.Model):
         District, on_delete=models.PROTECT, related_name='wards')
     type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, default=TYPE_WARD)
+    
+    def __str__(self) -> str:
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
