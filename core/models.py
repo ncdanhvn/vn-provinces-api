@@ -21,7 +21,6 @@ class Province(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    region = models.CharField(max_length=255)
     type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, default=TYPE_PROVINCE)
     region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name='provinces')
@@ -62,10 +61,12 @@ class District(models.Model):
 class Ward(models.Model):
     TYPE_WARD = 'W'         # Ward - Phường
     TYPE_COMMUNE = 'C'      # Commune - Xã
+    TYPE_TOWN = "T"         # Town - Thị trấn
 
     TYPE_CHOICES = [
         (TYPE_WARD, 'Ward'),
-        (TYPE_COMMUNE, 'Commune')
+        (TYPE_COMMUNE, 'Commune'),
+        (TYPE_TOWN, 'Town'),
     ]
 
     name = models.CharField(max_length=255)
