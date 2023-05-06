@@ -36,6 +36,12 @@ class ProvinceShortSerializer(serializers.ModelSerializer):
         return get_type(province)
     
 
+class RegionShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = ['id', 'name']
+
+
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
@@ -68,6 +74,7 @@ class ProvinceSerializer(serializers.ModelSerializer):
     name_en = serializers.SerializerMethodField(method_name='get_name_en')
     type = serializers.SerializerMethodField(method_name='get_province_type')
     type_en = serializers.SerializerMethodField(method_name='get_province_type_en')
+    region = RegionShortSerializer()
     
     def get_province_type(self, province):
         return get_type(province)
@@ -82,7 +89,7 @@ class ProvinceSerializer(serializers.ModelSerializer):
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
-        fields = ['id', 'name', 'provinces']
+        fields = ['id', 'name', 'name_en', 'provinces']
 
     provinces = ProvinceShortSerializer(many=True)
 
