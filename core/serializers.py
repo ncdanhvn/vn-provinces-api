@@ -89,9 +89,9 @@ class ProvinceSerializer(serializers.ModelSerializer):
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
-        fields = ['id', 'name', 'name_en', 'provinces']
+        fields = ['id', 'name', 'name_en', 'provinces_count']
 
-    provinces = ProvinceShortSerializer(many=True)
+    provinces_count = serializers.IntegerField(source='provinces.count')
 
 
 def get_type(object, en=False):
