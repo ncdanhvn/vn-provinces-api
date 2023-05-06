@@ -1,3 +1,4 @@
+from .utils.vn_to_en import remove_accents
 from django.db import models
 
 
@@ -33,6 +34,9 @@ class Province(models.Model):
     type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, default=TYPE_PROVINCE)
     
+    def name_en(self):
+        return remove_accents(self.name)
+
     def __str__(self) -> str:
         return self.name
     
