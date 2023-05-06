@@ -72,6 +72,9 @@ class District(models.Model):
     type = models.CharField(
         max_length=2, choices=TYPE_CHOICES, default=TYPE_URBAN_DISTRICT)
 
+    def name_en(self):
+        return remove_accents(self.name)
+    
     def __str__(self) -> str:
         return self.name
     
@@ -104,6 +107,9 @@ class Ward(models.Model):
     type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, default=TYPE_WARD)
     
+    def name_en(self):
+        return remove_accents(self.name)
+
     def __str__(self) -> str:
         return self.name
     

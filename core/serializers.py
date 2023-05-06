@@ -3,61 +3,57 @@ from .models import Region, Province, District, Ward
 from .utils.vn_to_en import remove_accents
 
 
-class WardShortSerializer(serializers.ModelSerializer):
+class DistrictShortSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Ward
-        fields = ['id', 'name', 'type']
-
-    type = serializers.SerializerMethodField(method_name='get_ward_type')
-
-    def get_ward_type(self, ward):
-        return get_type(ward)
+        model = District
+        fields = ['id', 'name', 'name_en']
 
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['id', 'name', 'type', 'district']
+        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'district']
 
     type = serializers.SerializerMethodField(method_name='get_ward_type')
+    type_en = serializers.SerializerMethodField(method_name='get_ward_en_type')
+    district = DistrictShortSerializer()
 
     def get_ward_type(self, ward):
         return get_type(ward)
-    
+        
+    def get_ward_en_type(self, ward):
+        return get_type(ward, en=True)
 
-class DistrictShortSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = District
-        fields = ['id', 'name', 'type']
-
-    type = serializers.SerializerMethodField(method_name='get_district_type')
-
-    def get_district_type(self, district):
-        return get_type(district)
-    
 
 class ProvinceShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
-        fields = ['id', 'name', 'type']
-
-    type = serializers.SerializerMethodField(method_name='get_province_type')
-
-    def get_province_type(self, province):
-        return get_type(province)
+        fields = ['id', 'name', 'name_en']
     
 
-class DistrictSerializer(serializers.ModelSerializer):
+class DistrictListSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['id', 'name', 'type', 'province']
-
-    province = ProvinceShortSerializer()
+        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'wards_count', 'province']
+    
     type = serializers.SerializerMethodField(method_name='get_district_type')
+    type_en = serializers.SerializerMethodField(method_name='get_district_en_type')
+    wards_count = serializers.IntegerField(source='wards.count')
+    province = ProvinceShortSerializer()
 
     def get_district_type(self, district):
         return get_type(district)
     
+    def get_district_en_type(self, district):
+        return get_type(district, en=True)
+
+
+class DistrictDetailsSerializer(DistrictListSerializer):
+    class Meta(DistrictListSerializer.Meta):
+        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'province', 'wards_count', 'wards']
+
+    wards = WardSerializer(many=True)
+
 
 class RegionShortSerializer(serializers.ModelSerializer):
     class Meta:
@@ -86,7 +82,7 @@ class ProvinceDetailsSerializer(ProvinceListSerializer):
     class Meta(ProvinceListSerializer.Meta):
         fields = ['id', 'name', 'name_en', 'type', 'type_en', 'region', 'districts_count', 'districts']
 
-    districts = DistrictShortSerializer(many=True)
+    districts = DistrictListSerializer(many=True)
 
 
 class RegionListSerializer(serializers.ModelSerializer):
