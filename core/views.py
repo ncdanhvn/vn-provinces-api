@@ -1,4 +1,3 @@
-from django.db.models import Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer
@@ -10,9 +9,7 @@ class RegionViewSet(ReadOnlyModelViewSet):
         if self.action == 'list':
             return Region.objects.prefetch_related('provinces')
         if self.action == 'retrieve':
-            return Region.objects.prefetch_related(Prefetch(
-                'provinces', 
-                queryset=Province.objects.prefetch_related('districts')))
+            return Region.objects.prefetch_related('provinces', 'provinces__districts')
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -28,9 +25,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
         if self.action == 'list':
             return Province.objects.select_related('region').prefetch_related('districts')
         if self.action == 'retrieve':
-            return Province.objects.select_related('region').prefetch_related(Prefetch(
-                'districts', 
-                queryset=District.objects.prefetch_related('wards')))  
+            return Province.objects.select_related('region').prefetch_related('districts', 'districts__wards')  
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -51,6 +46,6 @@ class DistrictViewSet(ReadOnlyModelViewSet):
         
 
 class WardViewSet(ReadOnlyModelViewSet):
-    queryset = Ward.objects.select_related('district')
+    queryset = Ward.objects.select_related('district', 'district__province')
     serializer_class = WardSerializer
     pagination_class = DefaultPagination
