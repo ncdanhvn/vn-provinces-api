@@ -16,7 +16,9 @@ class Region(models.Model):
 class Province(models.Model):
     name = models.CharField(max_length=255)
     region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name='provinces')
-
+    area = models.DecimalField(max_digits=8, decimal_places=2)
+    population = models.PositiveIntegerField()
+    
     # Province types
     TYPE_CITY = 'C'         # Thành Phố trực thuộc TW
     TYPE_PROVINCE = 'P'     # Tỉnh
