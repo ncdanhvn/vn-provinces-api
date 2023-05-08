@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer
@@ -19,13 +20,17 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet): 
-    pagination_class = DefaultPagination
+    queryset = Province.objects \
+        .select_related('region') \
+        .prefetch_related('districts', 'districts__wards') \
+        .annotate(wards_count=Count('districts__wards'))  
+    # pagination_class = DefaultPagination    
 
-    def get_queryset(self):
-        if self.action == 'list':
-            return Province.objects.select_related('region').prefetch_related('districts')
-        if self.action == 'retrieve':
-            return Province.objects.select_related('region').prefetch_related('districts', 'districts__wards')  
+    # def get_queryset(self):
+    #     if self.action == 'list':
+    #         return Province.objects.select_related('region').prefetch_related('districts')
+    #     if self.action == 'retrieve':
+    #         return Province.objects.select_related('region').prefetch_related('districts', 'districts__wards')  
 
     def get_serializer_class(self):
         if self.action == 'list':
