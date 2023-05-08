@@ -76,7 +76,7 @@ class ProvinceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
         fields = ['id', 'name', 'name_en', 'type', 'type_en', 'region', 'area', 'population', 
-                  'districts_count', 'wards_count']
+                  'number_plates', 'districts_count', 'wards_count']
     
     type = serializers.SerializerMethodField(method_name='get_province_type')
     type_en = serializers.SerializerMethodField(method_name='get_province_type_en')
