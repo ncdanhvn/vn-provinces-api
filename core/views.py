@@ -24,13 +24,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
         .select_related('region') \
         .prefetch_related('districts', 'districts__wards') \
         .annotate(wards_count=Count('districts__wards'))  
-    # pagination_class = DefaultPagination    
-
-    # def get_queryset(self):
-    #     if self.action == 'list':
-    #         return Province.objects.select_related('region').prefetch_related('districts')
-    #     if self.action == 'retrieve':
-    #         return Province.objects.select_related('region').prefetch_related('districts', 'districts__wards')  
+    pagination_class = DefaultPagination    
 
     def get_serializer_class(self):
         if self.action == 'list':
