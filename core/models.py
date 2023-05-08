@@ -117,3 +117,7 @@ class Ward(models.Model):
     
     class Meta:
         ordering = ['name']
+
+
+class NumberPlate(models.Model):
+    province = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='number_plates')

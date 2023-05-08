@@ -1,4 +1,6 @@
 - tests [done]
-- population and area to province data
-- neighbors provinces data
+- population and area to province data [done]
 - Number plate to provinces data
+- neighbors provinces data
+- is_coastal district
+- is_border district
