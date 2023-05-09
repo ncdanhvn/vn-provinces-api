@@ -1,5 +1,7 @@
-from .utils.vn_to_en import remove_accents
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+from .utils.vn_to_en import remove_accents
 
 
 class Region(models.Model):
@@ -121,3 +123,15 @@ class Ward(models.Model):
 
 class NumberPlate(models.Model):
     province = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='number_plates')
+
+
+class NeighbouringProvince(models.Model):
+    province_one = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='province_ones')
+    province_two = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='province_twos')
+
+    class Meta:
+        unique_together = [['province_one', 'province_two']]    
+
+    def clean(self) -> None:
+        if self.province_one >= self.province_two:
+            raise ValidationError(_("Draft entries may not have a publication date."))
