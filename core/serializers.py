@@ -40,7 +40,8 @@ class WardNoDistrictSerializer(WardSerializer):
 class DistrictListSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'province', 'wards_count', ]
+        fields = ['id', 'name', 'name_en', 'type', 'type_en', 
+                  'province', 'is_border', 'is_coastal' ,'wards_count', ]
     
     type = serializers.SerializerMethodField(method_name='get_district_type')
     type_en = serializers.SerializerMethodField(method_name='get_district_en_type')
@@ -56,14 +57,15 @@ class DistrictListSerializer(serializers.ModelSerializer):
 
 class DistrictDetailsSerializer(DistrictListSerializer):
     class Meta(DistrictListSerializer.Meta):
-        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'province', 'wards_count', 'wards']
+        fields = DistrictListSerializer.Meta.fields + ['wards']
 
     wards = WardNoDistrictSerializer(many=True)
 
 
 class DistrictListNoProvinceSerializer(DistrictListSerializer):
     class Meta(DistrictListSerializer.Meta):
-        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'wards_count']
+        fields = [field for field in DistrictListSerializer.Meta.fields 
+                  if field not in['province']]
 
 
 class RegionShortSerializer(serializers.ModelSerializer):
@@ -76,15 +78,29 @@ class ProvinceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
         fields = ['id', 'name', 'name_en', 'type', 'type_en', 'region', 'area', 'population', 
-                  'number_plates', 'neighbours', 'districts_count', 'wards_count']
+                  'number_plates', 'is_border', 'is_coastal', 'neighbours', 'districts_count', 'wards_count']
     
     type = serializers.SerializerMethodField(method_name='get_province_type')
     type_en = serializers.SerializerMethodField(method_name='get_province_type_en')
     region = RegionShortSerializer()
+    is_border = serializers.SerializerMethodField()
+    is_coastal = serializers.SerializerMethodField()
     neighbours = ProvinceShortSerializer(many=True)
     districts_count = serializers.IntegerField()
     wards_count = serializers.IntegerField()
     
+    def get_is_border(self, province: Province):
+        for district in province.districts.all():
+            if district.is_border:
+                return True
+        return False
+    
+    def get_is_coastal(self, province: Province):
+        for district in province.districts.all():
+            if district.is_coastal:
+                return True
+        return False
+
     def get_province_type(self, province):
         return get_type(province)
     

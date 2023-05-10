@@ -30,6 +30,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
                     .select_related('region') \
                     .prefetch_related('number_plates') \
                     .prefetch_related('neighbours') \
+                    .prefetch_related('districts') \
                     .annotate(districts_count=Count('districts', distinct=True), wards_count=Count('districts__wards')) 
         if self.action == 'retrieve':
             return Province.objects \
