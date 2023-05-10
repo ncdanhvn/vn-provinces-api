@@ -14,11 +14,11 @@ class TestRegions:
 
     def test_if_retrieve_region_return_200_and_correct_content(self):
         client = APIClient()
-        response = client.get('/api/regions/3/')
+        response = client.get('/api/regions/2/')
         
         assert response.status_code == status.HTTP_200_OK
-        assert response.data['name_en'] == 'Red River Delta'    
-        assert response.data['provinces_count'] == 2    # This region has 2 provinces
+        assert response.data['name_en'] == 'Northeast'    
+        assert response.data['provinces_count'] == 4    # This region has 4 provinces
 
 
 @pytest.mark.django_db
@@ -56,7 +56,7 @@ class TestDistricts:
         assert response.status_code == status.HTTP_200_OK
         assert response.data['name_en'] == 'Ba Dinh'    
         assert len(response.data['wards']) == 2    # This district has 0 wards in test db 
-        
+        assert response.data['is_border'] == 0    # This district is not is_border
 
 @pytest.mark.django_db
 class TestWards:
