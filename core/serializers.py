@@ -82,7 +82,7 @@ class ProvinceListSerializer(serializers.ModelSerializer):
     type_en = serializers.SerializerMethodField(method_name='get_province_type_en')
     region = RegionShortSerializer()
     neighbours = ProvinceShortSerializer(many=True)
-    districts_count = serializers.IntegerField(source='districts.count')
+    districts_count = serializers.IntegerField()
     wards_count = serializers.IntegerField()
     
     def get_province_type(self, province):

@@ -20,11 +20,22 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet): 
-    queryset = Province.objects \
-        .select_related('region') \
-        .prefetch_related('districts', 'districts__wards') \
-        .annotate(wards_count=Count('districts__wards'))  
-    pagination_class = DefaultPagination    
+    pagination_class = DefaultPagination   
+
+    def get_queryset(self):
+        if self.action == 'list':
+            return Province.objects \
+                    .select_related('region') \
+                    .prefetch_related('number_plates') \
+                    .prefetch_related('neighbours') \
+                    .annotate(districts_count=Count('districts', distinct=True), wards_count=Count('districts__wards')) 
+        if self.action == 'retrieve':
+            return Province.objects \
+                    .select_related('region') \
+                    .prefetch_related('number_plates') \
+                    .prefetch_related('neighbours') \
+                    .prefetch_related('districts__wards') \
+                    .annotate(districts_count=Count('districts', distinct=True), wards_count=Count('districts__wards'))         
 
     def get_serializer_class(self):
         if self.action == 'list':
