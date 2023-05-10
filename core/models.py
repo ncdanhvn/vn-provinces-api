@@ -20,6 +20,7 @@ class Province(models.Model):
     region = models.ForeignKey(Region, on_delete=models.PROTECT, related_name='provinces')
     area = models.DecimalField(max_digits=8, decimal_places=2)
     population = models.PositiveIntegerField()
+    neighbours = models.ManyToManyField("self", symmetrical=True)
     
     # Province types
     TYPE_CITY = 'C'         # Thành Phố trực thuộc TW
@@ -123,15 +124,4 @@ class Ward(models.Model):
 
 class NumberPlate(models.Model):
     province = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='number_plates')
-
-
-class NeighbouringProvince(models.Model):
-    province_one = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='province_ones')
-    province_two = models.ForeignKey(Province, on_delete=models.PROTECT, related_name='province_twos')
-
-    class Meta:
-        unique_together = [['province_one', 'province_two']]    
-
-    def clean(self) -> None:
-        if self.province_one >= self.province_two:
-            raise ValidationError(_("Draft entries may not have a publication date."))
+    
