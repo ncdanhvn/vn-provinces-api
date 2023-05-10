@@ -53,6 +53,8 @@ class District(models.Model):
     name = models.CharField(max_length=255)
     province = models.ForeignKey(
         Province, on_delete=models.PROTECT, related_name='districts')
+    is_border = models.BooleanField(default=False)
+    is_coastal = models.BooleanField(default=False)
 
     # District types
     TYPE_CITY = 'C'                 # City - Thành phố trực thuộc tỉnh/thành phố
