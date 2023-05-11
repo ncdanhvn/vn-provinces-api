@@ -1,6 +1,6 @@
 from django.db.models import Count, Max, Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
@@ -11,7 +11,7 @@ from .filters import ProvinceFilter, DistrictFilter, WardFilter
 class RegionViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         if self.action == 'list':
-            return Region.objects.prefetch_related('provinces')
+            return Region.objects.prefetch_related('provinces').annotate(provinces_count=Count('provinces'))
         if self.action == 'retrieve':
             province_prefetch = Prefetch('provinces', 
                                          queryset=Province.objects \
@@ -31,6 +31,9 @@ class RegionViewSet(ReadOnlyModelViewSet):
             return RegionListSerializer
         if self.action == 'retrieve':
             return RegionDetailsSerializer
+
+    filter_backends = [OrderingFilter]
+    ordering_fields = '__all__'
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet): 
@@ -66,9 +69,10 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
             return ProvinceDetailsSerializer
 
     pagination_class = DefaultPagination 
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProvinceFilter
     search_fields = ['name']
+    ordering_fields = '__all__'
 
 
 class DistrictViewSet(ReadOnlyModelViewSet):
@@ -84,9 +88,10 @@ class DistrictViewSet(ReadOnlyModelViewSet):
             return DistrictDetailsSerializer
         
     pagination_class = DefaultPagination 
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = DistrictFilter   
-    search_fields = ['name']     
+    search_fields = ['name']    
+    ordering_fields = '__all__' 
 
 
 class WardViewSet(ReadOnlyModelViewSet):
@@ -96,6 +101,7 @@ class WardViewSet(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter 
     search_fields = ['name']     
+    ordering_fields = '__all__'
 
 
 class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
@@ -109,3 +115,4 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter         
     search_fields = ['name']
+    ordering_fields = '__all__'

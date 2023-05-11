@@ -10,7 +10,7 @@
 - type, type-en: back to type by code, add type to filter [done]
 - filter [done]
 - search [done]    
-- sort 
+- sort [done]
 - apply strip, title function for string data
 - retouch:
     - field order: id after name
