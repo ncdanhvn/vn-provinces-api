@@ -6,6 +6,7 @@ from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
 from .pagination import DefaultPagination
 from .filters import ProvinceFilter, DistrictFilter, WardFilter
+from django.http import HttpResponse
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
@@ -123,3 +124,29 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+
+
+# def say_hello(request):
+#     format_wards_name()
+#     return HttpResponse('Hello World')
+
+
+# def format_wards_name():
+#     queryset = Ward.objects.all()
+#     count = 0
+
+#     for ward in queryset:
+#         name = ward.name
+#         name2 = reformat(name)
+#         if name2 != name:
+#             print('Found wards ', name)
+#             ward.name = name2
+#             ward.save()
+#             count += 1
+
+#     print(f'Edit {count} items')
+
+# def reformat(str):
+#     return str.title().strip()
+
+
