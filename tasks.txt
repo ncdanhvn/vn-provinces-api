@@ -6,10 +6,10 @@
 - is_border district [done]
 - population density [pass]
 - nested routers for wards view inside province view [done]
-- apply strip, title function for string data
-- sort, filter, search
+- nested routes tests [done]
 - type, type-en: back to type by code, add type to filter
-- nested routes tests
+- sort, filter, search
+- apply strip, title function for string data
 - retouch:
     - field order: id after name
 - pagination limit from input

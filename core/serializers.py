@@ -74,6 +74,7 @@ class DistrictListNoProvinceSerializer(DistrictListSerializer):
 
     wards_count = serializers.IntegerField(source='wards.count')
 
+
 class RegionShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region

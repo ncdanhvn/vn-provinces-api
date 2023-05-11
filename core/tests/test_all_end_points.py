@@ -74,3 +74,20 @@ class TestWards:
         assert response.status_code == status.HTTP_200_OK
         assert response.data['name_en'] == 'Phuc Xa'    
         assert response.data['province']['id'] == 1   
+
+
+@pytest.mark.django_db
+class TestWardsNested:
+    def test_if_list_wards_return_200_and_correct_wards_count(self):
+        client = APIClient()
+        response = client.get('/api/provinces/1/wards/')
+        
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['count'] == 2  # There are 2 wards in test db
+
+    def test_if_retrieve_ward_return_200_and_correct_content(self):
+        client = APIClient()
+        response = client.get('/api/provinces/1/wards/1/')
+        
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['name_en'] == 'Phuc Xa'    
