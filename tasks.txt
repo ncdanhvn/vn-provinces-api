@@ -2,5 +2,9 @@
 - population and area to province data [done]
 - Number plate to provinces data [done]
 - neighbors provinces data [done]
-- is_coastal district 
-- is_border district
+- is_coastal district [done]
+- is_border district [done]
+- population density [pass]
+- nested routers for wards view inside province view [done]
+- apply strip, title function for string data
+- sort, filter, search

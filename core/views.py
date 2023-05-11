@@ -1,10 +1,8 @@
 from django.db.models import Count
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from .models import Region, Province, District, Ward
-from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer
+from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
 from .pagination import DefaultPagination
-from django.http import HttpResponse
-import csv
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
@@ -64,56 +62,11 @@ class WardViewSet(ReadOnlyModelViewSet):
     pagination_class = DefaultPagination
 
 
-# def say_hello(request):
-#     # add_coastal_districts()
-#     print(District.objects.filter(is_coastal=True).count())
-#     return HttpResponse('Hello World')
-
-
-# def add_border_districts():
-#     # Read data from border_districts.csv
-#     found_count = 0
-#     with open('core/data/border_districts.csv', newline='', encoding='utf-8') as csvfile:
-#         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-#         for row in reader:
-#             province_name = row[0]
-#             district_name = row[1]
-
-#             # Find province and district with the same name
-#             try:
-#                 province = Province.objects.filter(name=province_name).first()
-#                 district = District.objects.filter(province__id=province.id, name=district_name).first()
-#                 if district and province:
-#                     district.is_border=True
-#                     district.save()
-#                     found_count += 1
-#                 else:
-#                     print('Error when finding district ', province_name, district_name)
-#             except:
-#                 print('Error when finding district ', province_name, district_name)
-#     print(found_count)
-        
-
-# def add_coastal_districts():
-#     # Read data from coastal_districts.csv
-#     found_count = 0
-#     with open('core/data/coastal_districts.csv', newline='', encoding='utf-8') as csvfile:
-#         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-#         for row in reader:
-#             province_name = row[0]
-#             district_name = row[1]
-
-#             # Find province and district with the same name
-#             try:
-#                 province = Province.objects.filter(name=province_name).first()
-#                 district = District.objects.filter(province__id=province.id, name=district_name).first()
-#                 if district and province:
-#                     district.is_coastal=True
-#                     district.save()
-#                     found_count += 1
-#                 else:
-#                     print('Error when finding district ', province_name, district_name)
-#             except:
-#                 print('Error when finding district ', province_name, district_name)
-#     print(found_count)
-        
+class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
+    def get_queryset(self):        
+        return Ward.objects \
+                .filter(district__province__id=self.kwargs['province_pk']) \
+                .select_related('district')
+    
+    serializer_class = WardNoProvinceSerializer
+    pagination_class = DefaultPagination

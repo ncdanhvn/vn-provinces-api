@@ -37,6 +37,11 @@ class WardNoDistrictSerializer(WardSerializer):
         fields = ['id', 'name', 'name_en', 'type', 'type_en']
 
 
+class WardNoProvinceSerializer(WardSerializer):
+    class Meta(WardSerializer.Meta):
+        fields = ['id', 'name', 'name_en', 'type', 'type_en', 'district']
+
+
 class DistrictListSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
