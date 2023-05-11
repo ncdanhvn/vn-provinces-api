@@ -88,17 +88,17 @@ class ProvinceListSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField(method_name='get_province_type')
     type_en = serializers.SerializerMethodField(method_name='get_province_type_en')
     region = RegionShortSerializer()
-    is_border = serializers.SerializerMethodField()
-    is_coastal = serializers.SerializerMethodField()
+    is_border = serializers.BooleanField()
+    is_coastal = serializers.BooleanField()
     neighbours = ProvinceShortSerializer(many=True)
     districts_count = serializers.IntegerField()
     wards_count = serializers.IntegerField()
     
-    def get_is_border(self, province: Province):
-        for district in province.districts.all():
-            if district.is_border:
-                return True
-        return False
+    # def get_is_border(self, province: Province):
+    #     for district in province.districts.all():
+    #         if district.is_border:
+    #             return True
+    #     return False
     
     def get_is_coastal(self, province: Province):
         for district in province.districts.all():

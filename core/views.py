@@ -1,8 +1,10 @@
-from django.db.models import Count
+from django.db.models import Count, Value, F, Max
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
 from .pagination import DefaultPagination
+from .filters import ProvinceFilter
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
@@ -20,8 +22,6 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet): 
-    pagination_class = DefaultPagination   
-
     def get_queryset(self):
         if self.action == 'list':
             return Province.objects \
@@ -29,20 +29,31 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
                     .prefetch_related('number_plates') \
                     .prefetch_related('neighbours') \
                     .prefetch_related('districts') \
-                    .annotate(districts_count=Count('districts', distinct=True), wards_count=Count('districts__wards')) 
+                    .annotate(
+                        districts_count=Count('districts', distinct=True), 
+                        wards_count=Count('districts__wards'),
+                        is_border=Max('districts__is_border'),
+                        is_coastal=Max('districts__is_coastal'))
+                        
         if self.action == 'retrieve':
             return Province.objects \
                     .select_related('region') \
                     .prefetch_related('number_plates') \
                     .prefetch_related('neighbours') \
                     .prefetch_related('districts__wards') \
-                    .annotate(districts_count=Count('districts', distinct=True), wards_count=Count('districts__wards'))         
+                    .annotate(
+                        districts_count=Count('districts', distinct=True), 
+                        wards_count=Count('districts__wards'))         
 
     def get_serializer_class(self):
         if self.action == 'list':
             return ProvinceListSerializer
         if self.action == 'retrieve':
             return ProvinceDetailsSerializer
+
+    pagination_class = DefaultPagination 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProvinceFilter
 
 
 class DistrictViewSet(ReadOnlyModelViewSet):
@@ -66,7 +77,7 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):        
         return Ward.objects \
                 .filter(district__province__id=self.kwargs['province_pk']) \
-                .select_related('district')
+                .select_related('district', 'district__province')
     
     serializer_class = WardNoProvinceSerializer
     pagination_class = DefaultPagination

@@ -8,3 +8,6 @@
 - nested routers for wards view inside province view [done]
 - apply strip, title function for string data
 - sort, filter, search
+- type, type-en: back to type by code, add type to filter
+- retouch:
+    - field order: id after name
