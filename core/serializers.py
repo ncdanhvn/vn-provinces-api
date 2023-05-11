@@ -72,6 +72,7 @@ class DistrictListNoProvinceSerializer(DistrictListSerializer):
         fields = [field for field in DistrictListSerializer.Meta.fields 
                   if field not in['province']]
 
+    wards_count = serializers.IntegerField(source='wards.count')
 
 class RegionShortSerializer(serializers.ModelSerializer):
     class Meta:
