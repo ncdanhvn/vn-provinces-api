@@ -6,7 +6,6 @@ from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
 from .pagination import DefaultPagination
 from .filters import ProvinceFilter, DistrictFilter, WardFilter
-from django.http import HttpResponse
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
