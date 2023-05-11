@@ -14,5 +14,5 @@
 - retouch: [done]
     - field order: id after name
     - province class order: by name
-- apply strip, title function for string data
+- apply strip, title function for string data [done]
 - pagination limit from input

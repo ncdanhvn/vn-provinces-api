@@ -14,10 +14,4 @@ provinces_router = routers.NestedDefaultRouter(
 provinces_router.register('wards', views.WardFromAProvinceViewSet,
                          basename='province-wards')
 
-# other_urls = [
-#     path('hello/', views.say_hello)
-# ]
-
-# urlpatterns = router.urls + other_urls
-
-urlpatterns = router.urls
+urlpatterns = router.urls + provinces_router.urls
