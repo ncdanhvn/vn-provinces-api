@@ -46,11 +46,11 @@ class DistrictListSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
         fields = ['id', 'name', 'name_en', 'type', 'type_en', 
-                  'province', 'is_border', 'is_coastal' ,'wards_count', ]
+                  'province', 'is_border', 'is_coastal' ,'wards_count']
     
     type = serializers.SerializerMethodField(method_name='get_district_type')
     type_en = serializers.SerializerMethodField(method_name='get_district_en_type')
-    wards_count = serializers.IntegerField(source='wards.count')
+    wards_count = serializers.IntegerField()
     province = ProvinceShortSerializer()
 
     def get_district_type(self, district):
@@ -93,18 +93,6 @@ class ProvinceListSerializer(serializers.ModelSerializer):
     neighbours = ProvinceShortSerializer(many=True)
     districts_count = serializers.IntegerField()
     wards_count = serializers.IntegerField()
-    
-    # def get_is_border(self, province: Province):
-    #     for district in province.districts.all():
-    #         if district.is_border:
-    #             return True
-    #     return False
-    
-    def get_is_coastal(self, province: Province):
-        for district in province.districts.all():
-            if district.is_coastal:
-                return True
-        return False
 
     def get_province_type(self, province):
         return get_type(province)

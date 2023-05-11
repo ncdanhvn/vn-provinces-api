@@ -1,6 +1,6 @@
 from django_filters import NumberFilter, BooleanFilter
 from django_filters.rest_framework import FilterSet
-from .models import Province
+from .models import Province, District, Ward
 
 
 class ProvinceFilter(FilterSet):
@@ -24,3 +24,23 @@ class ProvinceFilter(FilterSet):
         }
 
     
+class DistrictFilter(FilterSet):
+    province = NumberFilter()
+    is_border = BooleanFilter()
+    is_coastal = BooleanFilter()
+    wards_count = NumberFilter()
+    wards_count__gt = NumberFilter(field_name='wards_count', lookup_expr='gt')
+    wards_count__lt = NumberFilter(field_name='wards_count', lookup_expr='lt')    
+
+    class Meta:
+        model = District
+        fields = {}
+
+
+class WardFilter(FilterSet):
+    province = NumberFilter(field_name='district__province__id')
+    district = NumberFilter()
+
+    class Meta:
+        model = Ward
+        fields = {}

@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
 from .pagination import DefaultPagination
-from .filters import ProvinceFilter
+from .filters import ProvinceFilter, DistrictFilter, WardFilter
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
@@ -43,7 +43,9 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
                     .prefetch_related('districts__wards') \
                     .annotate(
                         districts_count=Count('districts', distinct=True), 
-                        wards_count=Count('districts__wards'))         
+                        wards_count=Count('districts__wards'),
+                        is_border=Max('districts__is_border'),
+                        is_coastal=Max('districts__is_coastal'))         
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -57,8 +59,10 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
 
 class DistrictViewSet(ReadOnlyModelViewSet):
-    queryset = District.objects.select_related('province').prefetch_related('wards')
-    pagination_class = DefaultPagination
+    queryset = District.objects \
+                .select_related('province') \
+                .prefetch_related('wards') \
+                .annotate(wards_count=Count('wards'))
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -66,11 +70,17 @@ class DistrictViewSet(ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return DistrictDetailsSerializer
         
+    pagination_class = DefaultPagination 
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = DistrictFilter        
+
 
 class WardViewSet(ReadOnlyModelViewSet):
     queryset = Ward.objects.select_related('district', 'district__province')
     serializer_class = WardSerializer
     pagination_class = DefaultPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = WardFilter      
 
 
 class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
@@ -81,3 +91,5 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     
     serializer_class = WardNoProvinceSerializer
     pagination_class = DefaultPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = WardFilter         

@@ -9,5 +9,7 @@
 - apply strip, title function for string data
 - sort, filter, search
 - type, type-en: back to type by code, add type to filter
+- nested routes tests
 - retouch:
     - field order: id after name
+- pagination limit from input
