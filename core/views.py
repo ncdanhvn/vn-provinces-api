@@ -77,7 +77,7 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):        
         return Ward.objects \
                 .filter(district__province__id=self.kwargs['province_pk']) \
-                .select_related('district', 'district__province')
+                .select_related('district')
     
     serializer_class = WardNoProvinceSerializer
     pagination_class = DefaultPagination
