@@ -7,8 +7,10 @@
 - population density [pass]
 - nested routers for wards view inside province view [done]
 - nested routes tests [done]
-- type, type-en: back to type by code, add type to filter
-- sort, filter, search
+- type, type-en: back to type by code, add type to filter [done]
+- filter [done]
+- search [done]    
+- sort 
 - apply strip, title function for string data
 - retouch:
     - field order: id after name

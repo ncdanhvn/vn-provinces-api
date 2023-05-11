@@ -1,5 +1,6 @@
 from django.db.models import Count, Max, Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
 from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
@@ -65,8 +66,9 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
             return ProvinceDetailsSerializer
 
     pagination_class = DefaultPagination 
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = ProvinceFilter
+    search_fields = ['name']
 
 
 class DistrictViewSet(ReadOnlyModelViewSet):
@@ -82,16 +84,18 @@ class DistrictViewSet(ReadOnlyModelViewSet):
             return DistrictDetailsSerializer
         
     pagination_class = DefaultPagination 
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = DistrictFilter        
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = DistrictFilter   
+    search_fields = ['name']     
 
 
 class WardViewSet(ReadOnlyModelViewSet):
     queryset = Ward.objects.select_related('district', 'district__province')
     serializer_class = WardSerializer
     pagination_class = DefaultPagination
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = WardFilter      
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = WardFilter 
+    search_fields = ['name']     
 
 
 class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
@@ -102,5 +106,6 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     
     serializer_class = WardNoProvinceSerializer
     pagination_class = DefaultPagination
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter         
+    search_fields = ['name']
