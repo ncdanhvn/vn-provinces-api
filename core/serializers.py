@@ -111,7 +111,7 @@ class ProvinceDetailsSerializer(ProvinceListSerializer):
 class ProvinceListNoRegionSerializer(ProvinceListSerializer):
     class Meta(ProvinceListSerializer.Meta):
         fields = [field for field in ProvinceListSerializer.Meta.fields 
-                  if field not in['region', 'districts_count', 'wards_count']]
+                  if field not in['region']]
 
 
 class RegionListSerializer(serializers.ModelSerializer):

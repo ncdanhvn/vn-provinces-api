@@ -1,4 +1,4 @@
-from django.db.models import Count, Value, F, Max
+from django.db.models import Count, Max, Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
@@ -12,7 +12,18 @@ class RegionViewSet(ReadOnlyModelViewSet):
         if self.action == 'list':
             return Region.objects.prefetch_related('provinces')
         if self.action == 'retrieve':
-            return Region.objects.prefetch_related('provinces', 'provinces__districts')
+            province_prefetch = Prefetch('provinces', 
+                                         queryset=Province.objects \
+                                            .select_related('region') \
+                                            .prefetch_related('number_plates') \
+                                            .prefetch_related('neighbours') \
+                                            .prefetch_related('districts') \
+                                            .annotate(
+                                                districts_count=Count('districts', distinct=True), 
+                                                wards_count=Count('districts__wards'),
+                                                is_border=Max('districts__is_border'),
+                                                is_coastal=Max('districts__is_coastal')))
+            return Region.objects.prefetch_related(province_prefetch)
 
     def get_serializer_class(self):
         if self.action == 'list':
