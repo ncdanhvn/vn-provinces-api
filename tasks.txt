@@ -11,8 +11,8 @@
 - filter [done]
 - search [done]    
 - sort [done]
-- apply strip, title function for string data
-- retouch:
+- retouch: [done]
     - field order: id after name
     - province class order: by name
+- apply strip, title function for string data
 - pagination limit from input

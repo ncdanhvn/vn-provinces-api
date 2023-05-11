@@ -6,19 +6,19 @@ from .utils.vn_to_en import remove_accents
 class ProvinceShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
-        fields = ['id', 'name', 'name_en']
+        fields = ['name', 'name_en', 'id']
 
 
 class DistrictShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['id', 'name', 'name_en']
+        fields = ['name', 'name_en', 'id']
 
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['id', 'name', 'name_en', 'type', 'district', 'province']
+        fields = ['name', 'name_en', 'id', 'type', 'district', 'province']
 
     district = DistrictShortSerializer()
     province = ProvinceShortSerializer(source='district.province')
@@ -37,7 +37,7 @@ class WardNoProvinceSerializer(WardSerializer):
 class DistrictListSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['id', 'name', 'name_en', 'type',  
+        fields = ['name', 'name_en', 'id', 'type',  
                   'province', 'is_border', 'is_coastal' ,'wards_count']
     
     wards_count = serializers.IntegerField()
@@ -62,13 +62,13 @@ class DistrictListNoProvinceSerializer(DistrictListSerializer):
 class RegionShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
-        fields = ['id', 'name', 'name_en']
+        fields = ['name', 'name_en', 'id']
 
     
 class ProvinceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
-        fields = ['id', 'name', 'name_en', 'type', 'region', 'area', 'population', 
+        fields = ['name', 'name_en', 'id', 'type', 'region', 'area', 'population', 
                   'number_plates', 'is_border', 'is_coastal', 'neighbours', 'districts_count', 'wards_count']
     
     region = RegionShortSerializer()
@@ -95,9 +95,9 @@ class ProvinceListNoRegionSerializer(ProvinceListSerializer):
 class RegionListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
-        fields = ['id', 'name', 'name_en', 'provinces_count']
+        fields = ['name', 'name_en', 'id', 'provinces_count']
 
-    provinces_count = serializers.IntegerField(source='provinces.count')
+    provinces_count = serializers.IntegerField()
 
 
 class RegionDetailsSerializer(RegionListSerializer):

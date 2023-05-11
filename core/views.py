@@ -11,7 +11,8 @@ from .filters import ProvinceFilter, DistrictFilter, WardFilter
 class RegionViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         if self.action == 'list':
-            return Region.objects.prefetch_related('provinces').annotate(provinces_count=Count('provinces'))
+            return Region.objects.prefetch_related('provinces') \
+                    .annotate(provinces_count=Count('provinces'))
         if self.action == 'retrieve':
             province_prefetch = Prefetch('provinces', 
                                          queryset=Province.objects \
@@ -24,7 +25,8 @@ class RegionViewSet(ReadOnlyModelViewSet):
                                                 wards_count=Count('districts__wards'),
                                                 is_border=Max('districts__is_border'),
                                                 is_coastal=Max('districts__is_coastal')))
-            return Region.objects.prefetch_related(province_prefetch)
+            return Region.objects.prefetch_related(province_prefetch) \
+                    .annotate(provinces_count=Count('provinces'))
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -34,6 +36,7 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
     filter_backends = [OrderingFilter]
     ordering_fields = '__all__'
+    ordering = ['id']
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet): 
@@ -73,6 +76,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
     filterset_class = ProvinceFilter
     search_fields = ['name']
     ordering_fields = '__all__'
+    ordering = ['name']
 
 
 class DistrictViewSet(ReadOnlyModelViewSet):
@@ -92,6 +96,7 @@ class DistrictViewSet(ReadOnlyModelViewSet):
     filterset_class = DistrictFilter   
     search_fields = ['name']    
     ordering_fields = '__all__' 
+    ordering = ['name']
 
 
 class WardViewSet(ReadOnlyModelViewSet):
@@ -102,6 +107,7 @@ class WardViewSet(ReadOnlyModelViewSet):
     filterset_class = WardFilter 
     search_fields = ['name']     
     ordering_fields = '__all__'
+    ordering = ['name']
 
 
 class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
@@ -116,3 +122,4 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     filterset_class = WardFilter         
     search_fields = ['name']
     ordering_fields = '__all__'
+    ordering = ['name']
