@@ -23,15 +23,10 @@ class Province(models.Model):
     neighbours = models.ManyToManyField("self", symmetrical=True)
     
     # Province types
-    TYPE_CITY = 'C'         # Thành Phố trực thuộc TW
-    TYPE_PROVINCE = 'P'     # Tỉnh
+    TYPE_CITY = 'C'         # City - Thành Phố trực thuộc TW
+    TYPE_PROVINCE = 'P'     # Province - Tỉnh
 
     TYPE_CHOICES = [
-        (TYPE_CITY, 'Thành phố'),
-        (TYPE_PROVINCE, 'Tỉnh')
-    ]
-
-    TYPE_EN_CHOICES = [
         (TYPE_CITY, 'City'),
         (TYPE_PROVINCE, 'Province')
     ]
@@ -63,13 +58,6 @@ class District(models.Model):
     TYPE_TOWN = 'T'                 # Town - Thị xã
 
     TYPE_CHOICES = [
-        (TYPE_CITY, 'Thành phố'),
-        (TYPE_URBAN_DISTRICT, 'Quận'),
-        (TYPE_RURAL_DISTRICT, 'Huyện'),
-        (TYPE_TOWN, 'Thị xã')
-    ]
-
-    TYPE_EN_CHOICES = [
         (TYPE_CITY, 'City'),
         (TYPE_URBAN_DISTRICT, 'Urban District'),
         (TYPE_RURAL_DISTRICT, 'Rural District'),
@@ -100,12 +88,6 @@ class Ward(models.Model):
     TYPE_TOWN = "T"         # Town - Thị trấn
     
     TYPE_CHOICES = [
-        (TYPE_WARD, 'Phường'),
-        (TYPE_COMMUNE, 'Xã'),
-        (TYPE_TOWN, 'Thị trấn'),
-    ]
-    
-    TYPE_EN_CHOICES = [
         (TYPE_WARD, 'Ward'),
         (TYPE_COMMUNE, 'Commune'),
         (TYPE_TOWN, 'Town'),

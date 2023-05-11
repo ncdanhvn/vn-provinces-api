@@ -12,4 +12,5 @@
 - apply strip, title function for string data
 - retouch:
     - field order: id after name
+    - province class order: by name
 - pagination limit from input

@@ -19,6 +19,7 @@ class ProvinceFilter(FilterSet):
     class Meta:
         model = Province
         fields = {
+            'type': ['exact'],
             'area': ['gt', 'lt'],    
             'population': ['gt', 'lt'],
         }
@@ -34,7 +35,7 @@ class DistrictFilter(FilterSet):
 
     class Meta:
         model = District
-        fields = {}
+        fields = {'type': ['exact']}
 
 
 class WardFilter(FilterSet):
@@ -43,4 +44,4 @@ class WardFilter(FilterSet):
 
     class Meta:
         model = Ward
-        fields = {}
+        fields = {'type': ['exact']}
