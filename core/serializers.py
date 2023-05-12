@@ -105,10 +105,3 @@ class RegionDetailsSerializer(RegionListSerializer):
         fields = RegionListSerializer.Meta.fields + ['provinces']
 
     provinces = ProvinceListNoRegionSerializer(many=True)
-
-
-class ProvinceDetailsShortSerializer(ProvinceShortSerializer):
-    class Meta(ProvinceShortSerializer.Meta):
-        fields = ProvinceShortSerializer.Meta.fields + ['districts']
-    
-    districts = DistrictShortSerializer(many=True)

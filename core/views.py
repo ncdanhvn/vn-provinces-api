@@ -3,7 +3,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
-from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer, ProvinceShortSerializer, ProvinceDetailsShortSerializer
+from .serializers import *
+from .serializers_only_basic import *
 from .pagination import DefaultPagination, NameOnlyPagination
 from .filters import ProvinceFilter, DistrictFilter, WardFilter
 
@@ -41,14 +42,14 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
 class ProvinceViewSet(ReadOnlyModelViewSet):                 
     def get_queryset(self):
-        name_only = self.request.query_params.get('name_only')
+        basic = self.request.query_params.get('basic')
 
-        if name_only:
+        if basic:
             self.pagination_class = NameOnlyPagination
             self.filter_backends = [SearchFilter, OrderingFilter]  
-            return Province.objects.only('name')
+            return Province.objects.only('name', 'type')
 
-        # Not name_only
+        # Not basic
         self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]   
         self.pagination_class = DefaultPagination   
         self.filterset_class = ProvinceFilter     
@@ -78,11 +79,11 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
                         is_coastal=Max('districts__is_coastal'))         
 
     def get_serializer_class(self):
-        name_only = self.request.query_params.get('name_only')
-        if name_only:
+        basic = self.request.query_params.get('basic')
+        if basic:
             if self.action == 'list':
-                return ProvinceShortSerializer
-            return ProvinceDetailsShortSerializer
+                return ProvinceBasicSerializer
+            return ProvinceDetailsBasicSerializer
                 
         if self.action == 'list':
             return ProvinceListSerializer
