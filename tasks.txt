@@ -18,6 +18,7 @@
 - pagination limit from input [done]
 - add name_only query parameter
     - province [done]
-    - districts 
-    - wards
+    - districts [done]
+    - wards [done]
+- Filter province to province_id, district to district_id    
 - Edit '01' to 'Phuong 1'

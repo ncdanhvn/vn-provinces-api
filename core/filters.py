@@ -34,7 +34,7 @@ class BasicProvinceFilter(FilterSet):
 
 
 class DistrictFilter(FilterSet):
-    province = NumberFilter()
+    province_id = NumberFilter(field_name='province_id')
     is_border = BooleanFilter()
     is_coastal = BooleanFilter()
     wards_count = NumberFilter()
@@ -57,8 +57,8 @@ class BasicDistrictFilter(FilterSet):
 
 
 class WardFilter(FilterSet):
-    province = NumberFilter(field_name='district__province__id')
-    district = NumberFilter()
+    province_id = NumberFilter(field_name='district__province__id')
+    district_id = NumberFilter(field_name='district_id')
 
     class Meta:
         model = Ward
