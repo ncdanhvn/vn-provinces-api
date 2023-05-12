@@ -2,11 +2,15 @@ from django.db.models import Count, Max, Prefetch
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+import logging
 from .models import Region, Province, District, Ward
 from .serializers import *
 from .serializers_only_basic import *
 from .pagination import *
 from .filters import *
+
+
+logger = logging.getLogger(__name__) 
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
