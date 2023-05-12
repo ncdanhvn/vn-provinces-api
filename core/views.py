@@ -3,8 +3,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
-from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer
-from .pagination import DefaultPagination
+from .serializers import RegionListSerializer, RegionDetailsSerializer, ProvinceListSerializer, ProvinceDetailsSerializer, DistrictListSerializer, DistrictDetailsSerializer, WardSerializer, WardNoProvinceSerializer, ProvinceShortSerializer, ProvinceDetailsShortSerializer
+from .pagination import DefaultPagination, NameOnlyPagination
 from .filters import ProvinceFilter, DistrictFilter, WardFilter
 
 
@@ -39,8 +39,20 @@ class RegionViewSet(ReadOnlyModelViewSet):
     ordering = ['id']
 
 
-class ProvinceViewSet(ReadOnlyModelViewSet): 
+class ProvinceViewSet(ReadOnlyModelViewSet):                 
     def get_queryset(self):
+        name_only = self.request.query_params.get('name_only')
+
+        if name_only:
+            self.pagination_class = NameOnlyPagination
+            self.filter_backends = [SearchFilter, OrderingFilter]  
+            return Province.objects.only('name')
+
+        # Not name_only
+        self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]   
+        self.pagination_class = DefaultPagination   
+        self.filterset_class = ProvinceFilter     
+
         if self.action == 'list':
             return Province.objects \
                     .select_related('region') \
@@ -66,14 +78,17 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
                         is_coastal=Max('districts__is_coastal'))         
 
     def get_serializer_class(self):
+        name_only = self.request.query_params.get('name_only')
+        if name_only:
+            if self.action == 'list':
+                return ProvinceShortSerializer
+            return ProvinceDetailsShortSerializer
+                
         if self.action == 'list':
             return ProvinceListSerializer
         if self.action == 'retrieve':
             return ProvinceDetailsSerializer
 
-    pagination_class = DefaultPagination 
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_class = ProvinceFilter
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']

@@ -16,3 +16,7 @@
     - province class order: by name
 - apply strip, title function for string data [done]
 - pagination limit from input [done]
+- add name_only query parameter
+    - province [done]
+    - districts 
+    - wards
