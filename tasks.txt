@@ -21,5 +21,6 @@
     - districts [done]
     - wards [done]
     - wards nested [done]
-- Filter province to province_id, district to district_id    
-- Edit '01' to 'Phuong 1'
+- Filter province to province_id, district to district_id [done]    
+- Edit '01' to 'Phuong 1' [pass]    
+- Edit 'Quan 1' to '1'
