@@ -10,6 +10,7 @@ mysqlclient = "*"
 djangorestframework = "*"
 drf-nested-routers = "*"
 django-filter = "*"
+gunicorn = "*"
 
 [dev-packages]
 pytest = "*"
