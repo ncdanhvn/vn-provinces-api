@@ -5,8 +5,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .models import Region, Province, District, Ward
 from .serializers import *
 from .serializers_only_basic import *
-from .pagination import DefaultPagination, NameOnlyPagination
-from .filters import ProvinceFilter, DistrictFilter, WardFilter
+from .pagination import *
+from .filters import *
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
@@ -45,12 +45,11 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
         basic = self.request.query_params.get('basic')
 
         if basic:
-            self.pagination_class = NameOnlyPagination
-            self.filter_backends = [SearchFilter, OrderingFilter]  
+            self.pagination_class = BasicPagination            
+            self.filterset_class = BasicProvinceFilter
             return Province.objects.only('name', 'type')
 
         # Not basic
-        self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]   
         self.pagination_class = DefaultPagination   
         self.filterset_class = ProvinceFilter     
 
@@ -90,6 +89,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return ProvinceDetailsSerializer
 
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] 
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
@@ -100,12 +100,11 @@ class DistrictViewSet(ReadOnlyModelViewSet):
         basic = self.request.query_params.get('basic')
 
         if basic:
-            self.pagination_class = NameOnlyPagination
-            self.filter_backends = [SearchFilter, OrderingFilter]  
+            self.pagination_class = BasicPagination
+            self.filterset_class = BasicDistrictFilter    
             return District.objects.only('name', 'type', 'province_id')
             
-        # Not basic
-        self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]   
+        # Not basic  
         self.pagination_class = DefaultPagination   
         self.filterset_class = DistrictFilter              
         return District.objects \
@@ -125,6 +124,7 @@ class DistrictViewSet(ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return DistrictDetailsSerializer
         
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]       
     search_fields = ['name']    
     ordering_fields = '__all__' 
     ordering = ['name']
@@ -135,16 +135,13 @@ class WardViewSet(ReadOnlyModelViewSet):
         basic = self.request.query_params.get('basic')
 
         if basic:
-            self.pagination_class = NameOnlyPagination
-            self.filter_backends = [SearchFilter, OrderingFilter]  
+            self.pagination_class = BasicPagination
             return Ward.objects \
                     .select_related('district', 'district__province') \
                     .only('name', 'type', 'district_id', 'district__province__id')
             
         # Not basic
-        self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]   
         self.pagination_class = DefaultPagination   
-        self.filterset_class = WardFilter              
         return Ward.objects.select_related('district', 'district__province')
         
     def get_serializer_class(self):
@@ -153,6 +150,8 @@ class WardViewSet(ReadOnlyModelViewSet):
             return WardBasicSerializer
         return WardSerializer
 
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] 
+    filterset_class = WardFilter    
     search_fields = ['name']     
     ordering_fields = '__all__'
     ordering = ['name']

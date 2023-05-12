@@ -24,7 +24,15 @@ class ProvinceFilter(FilterSet):
             'population': ['gt', 'lt'],
         }
 
-    
+
+class BasicProvinceFilter(FilterSet):
+    class Meta:
+        model = Province
+        fields = {
+            'type': ['exact'],
+        }
+
+
 class DistrictFilter(FilterSet):
     province = NumberFilter()
     is_border = BooleanFilter()
@@ -36,6 +44,16 @@ class DistrictFilter(FilterSet):
     class Meta:
         model = District
         fields = {'type': ['exact']}
+
+
+class BasicDistrictFilter(FilterSet):
+    province_id = NumberFilter(field_name='province_id')
+
+    class Meta:
+        model = District
+        fields = {
+            'type': ['exact'],
+        }
 
 
 class WardFilter(FilterSet):

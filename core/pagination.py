@@ -7,6 +7,6 @@ class DefaultPagination(PageNumberPagination):
     page_size_query_param = 'limit'
 
 
-class NameOnlyPagination(PageNumberPagination):
+class BasicPagination(PageNumberPagination):
     page_size = 100
 
