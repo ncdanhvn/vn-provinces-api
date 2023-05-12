@@ -158,12 +158,25 @@ class WardViewSet(ReadOnlyModelViewSet):
 
 
 class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
-    def get_queryset(self):        
-        return Ward.objects \
-                .filter(district__province__id=self.kwargs['province_pk']) \
-                .select_related('district')
+    def get_queryset(self):    
+        queryset = Ward.objects.filter(district__province__id=self.kwargs['province_pk'])     
+        basic = self.request.query_params.get('basic')
+        if basic:
+            self.pagination_class = BasicPagination
+            return queryset \
+                    .select_related('district', 'district__province') \
+                    .only('name', 'type', 'district_id', 'district__province__id')
+                
+        # Not basic
+        self.pagination_class = DefaultPagination           
+        return queryset.select_related('district')
     
-    serializer_class = WardNoProvinceSerializer
+    def get_serializer_class(self):
+        basic = self.request.query_params.get('basic')
+        if basic:
+            return WardNoProvinceBasicSerializer
+        return WardNoProvinceSerializer
+        
     pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter         
