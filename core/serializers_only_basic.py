@@ -18,7 +18,9 @@ class DistrictBasicSerializer(serializers.ModelSerializer):
 class WardBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['name', 'name_en', 'id', 'type', 'province_id', 'district_id']
+        fields = ['name', 'name_en', 'id', 'type', 'district_id', 'province_id']
+
+    province_id = serializers.IntegerField(source='district.province.id')
 
 
 class DistrictNoProvinceSerializer(serializers.ModelSerializer):
