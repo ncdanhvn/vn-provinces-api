@@ -6,7 +6,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('regions', views.RegionViewSet, basename='regions')
 router.register('provinces', views.ProvinceViewSet, basename='provinces')
-router.register('districts', views.DistrictViewSet)
+router.register('districts', views.DistrictViewSet, basename='districts')
 router.register('wards', views.WardViewSet)
 
 provinces_router = routers.NestedDefaultRouter(

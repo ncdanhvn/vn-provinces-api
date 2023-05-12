@@ -96,20 +96,35 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
 
 class DistrictViewSet(ReadOnlyModelViewSet):
-    queryset = District.objects \
+    def get_queryset(self):
+        basic = self.request.query_params.get('basic')
+
+        if basic:
+            self.pagination_class = NameOnlyPagination
+            self.filter_backends = [SearchFilter, OrderingFilter]  
+            return District.objects.only('name', 'type', 'province_id')
+            
+        # Not basic
+        self.filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]   
+        self.pagination_class = DefaultPagination   
+        self.filterset_class = DistrictFilter              
+        return District.objects \
                 .select_related('province') \
                 .prefetch_related('wards') \
                 .annotate(wards_count=Count('wards'))
 
     def get_serializer_class(self):
+        basic = self.request.query_params.get('basic')
+        if basic:
+            if self.action == 'list':
+                return DistrictBasicSerializer
+            return DistrictDetailsBasicSerializer
+                
         if self.action == 'list':
             return DistrictListSerializer
         if self.action == 'retrieve':
             return DistrictDetailsSerializer
         
-    pagination_class = DefaultPagination 
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_class = DistrictFilter   
     search_fields = ['name']    
     ordering_fields = '__all__' 
     ordering = ['name']
