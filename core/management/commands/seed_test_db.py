@@ -11,7 +11,7 @@ class Command(BaseCommand):
         file_name = 'test_db.sql'
         current_dir = os.path.dirname(__file__)
         file_path = os.path.join(current_dir, file_name)
-        sql = Path(file_path).read_text()
+        sql = Path(file_path).read_text(encoding='utf8')
         
         print(f'Populating the database with {file_name}...')
         with connection.cursor() as cursor:

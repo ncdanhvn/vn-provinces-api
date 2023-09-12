@@ -11,6 +11,7 @@ djangorestframework = "*"
 drf-nested-routers = "*"
 django-filter = "*"
 gunicorn = "*"
+tzdata = "*"
 
 [dev-packages]
 pytest = "*"
