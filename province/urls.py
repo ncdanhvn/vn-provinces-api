@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 admin.site.site_header = "Provinces-API Admin"
 admin.site.index_title = "Admin"
@@ -24,4 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
     path('api/', include('core.urls')),
-]
+    path('docs/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+] 

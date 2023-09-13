@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "debug_toolbar",
     'core',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +119,7 @@ REST_FRAMEWORK = {
     #     'rest_framework.renderers.JSONRenderer',
     # )
     'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 LOGGING = {
@@ -145,4 +147,25 @@ LOGGING = {
             'style': '{' #str.format()
         }
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Vietnam Provinces API',
+    'DESCRIPTION': 'Public APIs for Vietnam geographical regions, provinces, districts, wards and some related administration information',
+    'VERSION': '1.0.1',
+    # 'CONTACT': {
+    #     'name': 'Danh Nguyen',
+    #     'email': 'ncdanhvn@gmail.com',
+    #     'github': 'https://github.com/ncdanhvn'
+    # },
+    # 'EXTERNAL_DOCS': {
+    #     'url': 'http://homepage',
+    #     'description': 'Back to homepage for general guide',
+    # },
+    'SERVE_INCLUDE_SCHEMA': False,
+    'REDOC_UI_SETTINGS': {
+        'hideDownloadButton': True, 
+    },
+    'SORT_OPERATIONS': False,
+    'SERVE_AUTHENTICATION': None,
 }
