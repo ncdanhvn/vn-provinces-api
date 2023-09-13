@@ -86,10 +86,10 @@ class ProvinceDetailsSerializer(ProvinceListSerializer):
     districts = DistrictListNoProvinceSerializer(many=True)
 
 
-class ProvinceListNoRegionSerializer(ProvinceListSerializer):
-    class Meta(ProvinceListSerializer.Meta):
-        fields = [field for field in ProvinceListSerializer.Meta.fields 
-                  if field not in['region']]
+# class ProvinceListNoRegionSerializer(ProvinceListSerializer):
+#     class Meta(ProvinceListSerializer.Meta):
+#         fields = [field for field in ProvinceListSerializer.Meta.fields 
+#                   if field not in['region']]
 
 
 class RegionListSerializer(serializers.ModelSerializer):
@@ -104,4 +104,4 @@ class RegionDetailsSerializer(RegionListSerializer):
     class Meta(RegionListSerializer.Meta):
         fields = RegionListSerializer.Meta.fields + ['provinces']
 
-    provinces = ProvinceListNoRegionSerializer(many=True)
+    provinces = ProvinceShortSerializer(many=True)

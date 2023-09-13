@@ -10,28 +10,12 @@ from .pagination import *
 from .filters import *
 
 
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__name__)
 
 
 class RegionViewSet(ReadOnlyModelViewSet):
-    def get_queryset(self):
-        if self.action == 'list':
-            return Region.objects.prefetch_related('provinces') \
-                    .annotate(provinces_count=Count('provinces'))
-        if self.action == 'retrieve':
-            province_prefetch = Prefetch('provinces', 
-                                         queryset=Province.objects \
-                                            .select_related('region') \
-                                            .prefetch_related('number_plates') \
-                                            .prefetch_related('neighbours') \
-                                            .prefetch_related('districts') \
-                                            .annotate(
-                                                districts_count=Count('districts', distinct=True), 
-                                                wards_count=Count('districts__wards'),
-                                                is_border=Max('districts__is_border'),
-                                                is_coastal=Max('districts__is_coastal')))
-            return Region.objects.prefetch_related(province_prefetch) \
-                    .annotate(provinces_count=Count('provinces'))
+    queryset = Region.objects.prefetch_related('provinces') \
+        .annotate(provinces_count=Count('provinces'))
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -44,42 +28,42 @@ class RegionViewSet(ReadOnlyModelViewSet):
     ordering = ['id']
 
 
-class ProvinceViewSet(ReadOnlyModelViewSet):                 
+class ProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
 
         if basic:
-            self.pagination_class = BasicPagination            
+            self.pagination_class = BasicPagination
             self.filterset_class = BasicProvinceFilter
             return Province.objects.only('name', 'type')
 
         # Not basic
-        self.pagination_class = DefaultPagination   
-        self.filterset_class = ProvinceFilter     
+        self.pagination_class = DefaultPagination
+        self.filterset_class = ProvinceFilter
 
         if self.action == 'list':
             return Province.objects \
-                    .select_related('region') \
-                    .prefetch_related('number_plates') \
-                    .prefetch_related('neighbours') \
-                    .prefetch_related('districts') \
-                    .annotate(
-                        districts_count=Count('districts', distinct=True), 
-                        wards_count=Count('districts__wards'),
-                        is_border=Max('districts__is_border'),
-                        is_coastal=Max('districts__is_coastal'))
-                        
+                .select_related('region') \
+                .prefetch_related('number_plates') \
+                .prefetch_related('neighbours') \
+                .prefetch_related('districts') \
+                .annotate(
+                    districts_count=Count('districts', distinct=True),
+                    wards_count=Count('districts__wards'),
+                    is_border=Max('districts__is_border'),
+                    is_coastal=Max('districts__is_coastal'))
+
         if self.action == 'retrieve':
             return Province.objects \
-                    .select_related('region') \
-                    .prefetch_related('number_plates') \
-                    .prefetch_related('neighbours') \
-                    .prefetch_related('districts__wards') \
-                    .annotate(
-                        districts_count=Count('districts', distinct=True), 
-                        wards_count=Count('districts__wards'),
-                        is_border=Max('districts__is_border'),
-                        is_coastal=Max('districts__is_coastal'))         
+                .select_related('region') \
+                .prefetch_related('number_plates') \
+                .prefetch_related('neighbours') \
+                .prefetch_related('districts__wards') \
+                .annotate(
+                    districts_count=Count('districts', distinct=True),
+                    wards_count=Count('districts__wards'),
+                    is_border=Max('districts__is_border'),
+                    is_coastal=Max('districts__is_coastal'))
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
@@ -87,13 +71,13 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
             if self.action == 'list':
                 return ProvinceBasicSerializer
             return ProvinceDetailsBasicSerializer
-                
+
         if self.action == 'list':
             return ProvinceListSerializer
         if self.action == 'retrieve':
             return ProvinceDetailsSerializer
 
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] 
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
@@ -105,16 +89,16 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 
         if basic:
             self.pagination_class = BasicPagination
-            self.filterset_class = BasicDistrictFilter    
+            self.filterset_class = BasicDistrictFilter
             return District.objects.only('name', 'type', 'province_id')
-            
-        # Not basic  
-        self.pagination_class = DefaultPagination   
-        self.filterset_class = DistrictFilter              
+
+        # Not basic
+        self.pagination_class = DefaultPagination
+        self.filterset_class = DistrictFilter
         return District.objects \
-                .select_related('province') \
-                .prefetch_related('wards') \
-                .annotate(wards_count=Count('wards'))
+            .select_related('province') \
+            .prefetch_related('wards') \
+            .annotate(wards_count=Count('wards'))
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
@@ -122,15 +106,15 @@ class DistrictViewSet(ReadOnlyModelViewSet):
             if self.action == 'list':
                 return DistrictBasicSerializer
             return DistrictDetailsBasicSerializer
-                
+
         if self.action == 'list':
             return DistrictListSerializer
         if self.action == 'retrieve':
             return DistrictDetailsSerializer
-        
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]       
-    search_fields = ['name']    
-    ordering_fields = '__all__' 
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = '__all__'
     ordering = ['name']
 
 
@@ -141,49 +125,50 @@ class WardViewSet(ReadOnlyModelViewSet):
         if basic:
             self.pagination_class = BasicPagination
             return Ward.objects \
-                    .select_related('district', 'district__province') \
-                    .only('name', 'type', 'district_id', 'district__province__id')
-            
+                .select_related('district', 'district__province') \
+                .only('name', 'type', 'district_id', 'district__province__id')
+
         # Not basic
-        self.pagination_class = DefaultPagination   
+        self.pagination_class = DefaultPagination
         return Ward.objects.select_related('district', 'district__province')
-        
+
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
         if basic:
             return WardBasicSerializer
         return WardSerializer
 
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] 
-    filterset_class = WardFilter    
-    search_fields = ['name']     
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = WardFilter
+    search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
 
 
-class WardFromAProvinceViewSet(ReadOnlyModelViewSet):   
-    def get_queryset(self):    
-        queryset = Ward.objects.filter(district__province__id=self.kwargs['province_pk'])     
+class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
+    def get_queryset(self):
+        queryset = Ward.objects.filter(
+            district__province__id=self.kwargs['province_pk'])
         basic = self.request.query_params.get('basic')
         if basic:
             self.pagination_class = BasicPagination
             return queryset \
-                    .select_related('district', 'district__province') \
-                    .only('name', 'type', 'district_id', 'district__province__id')
-                
+                .select_related('district', 'district__province') \
+                .only('name', 'type', 'district_id', 'district__province__id')
+
         # Not basic
-        self.pagination_class = DefaultPagination           
+        self.pagination_class = DefaultPagination
         return queryset.select_related('district')
-    
+
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
         if basic:
             return WardNoProvinceBasicSerializer
         return WardNoProvinceSerializer
-        
+
     pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
-    filterset_class = WardFilter         
+    filterset_class = WardFilter
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
