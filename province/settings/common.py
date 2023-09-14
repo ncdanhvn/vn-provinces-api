@@ -182,8 +182,8 @@ SPECTACULAR_SETTINGS = {
     #     'description': 'Back to homepage for general guide',
     # },
     'SERVE_INCLUDE_SCHEMA': False,
-    'REDOC_UI_SETTINGS': {
-        'hideDownloadButton': True,
+    'SWAGGER_UI_SETTINGS': {
+        'defaultModelsExpandDepth': -1,
     },
     'SORT_OPERATIONS': False,
     'SORT_OPERATION_PARAMETERS': parameter_sort_function,
