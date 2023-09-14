@@ -171,6 +171,15 @@ class WardViewSet(ReadOnlyModelViewSet):
     ordering_fields = '__all__'
     ordering = ['name']
 
+    # For documentation generation
+    @wards_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @ward_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
 
 class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):

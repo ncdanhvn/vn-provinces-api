@@ -143,7 +143,13 @@ limit_parameter = OpenApiParameter(
 province_id = OpenApiParameter(
     name='province_id',
     type=OpenApiTypes.INT,
-    description='Get districts of a province with given id',
+    description='Get results from a province with given id',
+)
+
+district_id = OpenApiParameter(
+    name='district_id',
+    type=OpenApiTypes.INT,
+    description='Get results from a district with given id',
 )
 
 provinces_list_extend_schema = extend_schema(
@@ -342,7 +348,7 @@ districts_list_extend_schema = extend_schema(
 
 district_details_extend_schema = extend_schema(
     description='Get details of one district',
-    operation_id='Districts List',
+    operation_id='Districts Details',
     parameters=[
         basic_parameter,
     ],
@@ -408,5 +414,88 @@ district_details_extend_schema = extend_schema(
                 ]
             }
         )
+    ]
+)
+
+wards_list_extend_schema = extend_schema(
+    operation_id='Wards List',
+    description='Get all wards in country',
+    parameters=[
+        province_id,
+        district_id,
+        limit_parameter,
+        basic_parameter,
+    ],
+    examples=[
+        OpenApiExample(
+            name='Full information',
+            value={
+                "name": "Bách Khoa",
+                "name_en": "Bach Khoa",
+                "id": 277,
+                "type": "W",
+                "district": {
+                    "name": "Hai Bà Trưng",
+                    "name_en": "Hai Ba Trung",
+                    "id": 7
+                },
+                "province": {
+                    "name": "Hà Nội",
+                    "name_en": "Ha Noi",
+                    "id": 1
+                }
+            }
+        ),
+        OpenApiExample(
+            name='With "basic" query',
+            value={
+                "name": "Bách Khoa",
+                "name_en": "Bach Khoa",
+                "id": 277,
+                "type": "W",
+                "district_id": 7,
+                "province_id": 1
+            }
+        ),
+    ]
+)
+
+ward_details_extend_schema = extend_schema(
+    operation_id='Ward Details',
+    description='Get details of one ward',
+    parameters=[
+        basic_parameter,
+    ],
+    examples=[
+        OpenApiExample(
+            name='Full information',
+            value={
+                "name": "Bách Khoa",
+                "name_en": "Bach Khoa",
+                "id": 277,
+                "type": "W",
+                "district": {
+                    "name": "Hai Bà Trưng",
+                    "name_en": "Hai Ba Trung",
+                    "id": 7
+                },
+                "province": {
+                    "name": "Hà Nội",
+                    "name_en": "Ha Noi",
+                    "id": 1
+                }
+            }
+        ),
+        OpenApiExample(
+            name='With "basic" query',
+            value={
+                "name": "Bách Khoa",
+                "name_en": "Bach Khoa",
+                "id": 277,
+                "type": "W",
+                "district_id": 7,
+                "province_id": 1
+            }
+        ),
     ]
 )
