@@ -21,7 +21,7 @@ regions_list_extend_schema = extend_schema(
 )
 
 region_details_extend_schema = extend_schema(
-    description='Get detail of one region',
+    description='Get details of one region',
     operation_id='Region Details',
     examples=[
         OpenApiExample(
@@ -136,8 +136,14 @@ wards_count_parameters = [
 limit_parameter = OpenApiParameter(
     name='limit',
     type=OpenApiTypes.INT,
-    description='Number of results to return per page. Maximum is 100',
+    description='Number of results to return per page. Maximum is 100.',
     default=10,
+)
+
+province_id = OpenApiParameter(
+    name='province_id',
+    type=OpenApiTypes.INT,
+    description='Get districts of a province with given id',
 )
 
 provinces_list_extend_schema = extend_schema(
@@ -202,8 +208,8 @@ provinces_list_extend_schema = extend_schema(
     ],
 )
 
-province_detail_extend_schema = extend_schema(
-    description='Get detail of one region',
+province_details_extend_schema = extend_schema(
+    description='Get details of one province',
     operation_id='Province Details',
     parameters=[basic_parameter],
     examples=[
@@ -292,4 +298,115 @@ province_detail_extend_schema = extend_schema(
             },
         ),
     ],
+)
+
+districts_list_extend_schema = extend_schema(
+    description='Get all districts in country',
+    operation_id='Districts List',
+    parameters=[
+        province_id,
+        basic_parameter,
+        *wards_count_parameters,
+        limit_parameter,
+    ],
+    examples=[
+        OpenApiExample(
+            name='Full information',
+            value={
+                "name": "Phú Quốc",
+                "name_en": "Phu Quoc",
+                "id": 911,
+                "type": "C",
+                "province": {
+                    "name": "Kiên Giang",
+                    "name_en": "Kien Giang",
+                    "id": 91
+                },
+                "is_border": 'false',
+                "is_coastal": 'true',
+                "wards_count": 9
+            }
+        ),
+        OpenApiExample(
+            name='With "basic" query',
+            value={
+                "name": "Phú Quốc",
+                "name_en": "Phu Quoc",
+                "id": 911,
+                "type": "C",
+                "province_id": 91
+            }
+        )
+    ]
+)
+
+district_details_extend_schema = extend_schema(
+    description='Get details of one district',
+    operation_id='Districts List',
+    parameters=[
+        basic_parameter,
+    ],
+    examples=[
+        OpenApiExample(
+            name='Full information',
+            value={
+                "name": "Phú Quốc",
+                "name_en": "Phu Quoc",
+                "id": 911,
+                "type": "C",
+                "province": {
+                    "name": "Kiên Giang",
+                    "name_en": "Kien Giang",
+                    "id": 91
+                },
+                "is_border": 'false',
+                "is_coastal": 'true',
+                "wards_count": 9,
+                "wards": [
+                    {
+                        "name": "Dương Đông",
+                        "name_en": "Duong Dong",
+                        "id": 31078,
+                        "type": "W"
+                    },
+                    {
+                        "name": "Gành Dầu",
+                        "name_en": "Ganh Dau",
+                        "id": 31087,
+                        "type": "C"
+                    },
+                    {
+                        "name": "...",
+                    },
+                ]
+            }
+        ),
+        OpenApiExample(
+            name='With "basic" query',
+            value={
+                "name": "Phú Quốc",
+                "name_en": "Phu Quoc",
+                "id": 911,
+                "type": "C",
+                "province_id": 91,
+                "wards": [
+                    {
+                        "name": "Dương Đông",
+                        "name_en": "Duong Dong",
+                        "id": 31078,
+                        "type": "W"
+                    },
+                    {
+                        "name": "Gành Dầu",
+                        "name_en": "Ganh Dau",
+                        "id": 31087,
+                        "type": "C"
+                    },
+                    {
+                        "name": "..."
+                    }
+                ]
+            }
+        )
+    ]
 )

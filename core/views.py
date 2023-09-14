@@ -97,7 +97,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
-    @province_detail_extend_schema
+    @province_details_extend_schema
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
@@ -136,6 +136,14 @@ class DistrictViewSet(ReadOnlyModelViewSet):
     ordering_fields = '__all__'
     ordering = ['name']
 
+    # For documentation generation
+    @districts_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @district_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 class WardViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
