@@ -26,5 +26,5 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('api/', include('core.urls')),
     path('docs/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='redoc'),
 ] 
