@@ -139,16 +139,34 @@ LOGGING = {
     'loggers': {
         '': {
             'handlers': ['console', 'file'],
-            'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO') # Use INFO level by default if no value in environment variables
+            # Use INFO level by default if no value in environment variables
+            'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
         }
     },
     'formatters': {
         'verbose': {
             'format': '{asctime} ({levelname}) - {name} - {message}',
-            'style': '{' #str.format()
+            'style': '{'  # str.format()
         }
     }
 }
+
+
+def parameter_sort_function(p):
+    name = p['name']
+    parameters_sort = [
+        'id',
+        'region',
+        'province_id',
+        'district_id',
+        'type',
+        'basic',
+    ]
+
+    if name in parameters_sort:
+        return parameters_sort.index(name)
+    return 100
+
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Vietnam Provinces API',
@@ -165,8 +183,9 @@ SPECTACULAR_SETTINGS = {
     # },
     'SERVE_INCLUDE_SCHEMA': False,
     'REDOC_UI_SETTINGS': {
-        'hideDownloadButton': True, 
+        'hideDownloadButton': True,
     },
     'SORT_OPERATIONS': False,
+    'SORT_OPERATION_PARAMETERS': parameter_sort_function,
     'SERVE_AUTHENTICATION': None,
 }
