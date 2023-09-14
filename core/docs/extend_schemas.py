@@ -5,7 +5,7 @@ from drf_spectacular import openapi
 
 regions_list_extend_schema = extend_schema(
     description='Get all regions in country',
-    operation_id='Regions List',
+    operation_id='regions_list',
     examples=[
         OpenApiExample(
                 name='Example 1',
@@ -22,7 +22,7 @@ regions_list_extend_schema = extend_schema(
 
 region_details_extend_schema = extend_schema(
     description='Get details of one region',
-    operation_id='Region Details',
+    operation_id='region_details',
     examples=[
         OpenApiExample(
                 name='Example 1',
@@ -154,7 +154,7 @@ district_id = OpenApiParameter(
 
 provinces_list_extend_schema = extend_schema(
     description='Get all provinces in country',
-    operation_id='Provinces List',
+    operation_id='provinces_list',
     parameters=[
         basic_parameter,
         *area_parameters,
@@ -216,7 +216,7 @@ provinces_list_extend_schema = extend_schema(
 
 province_details_extend_schema = extend_schema(
     description='Get details of one province',
-    operation_id='Province Details',
+    operation_id='province_details',
     parameters=[basic_parameter],
     examples=[
         OpenApiExample(
@@ -308,7 +308,7 @@ province_details_extend_schema = extend_schema(
 
 districts_list_extend_schema = extend_schema(
     description='Get all districts in country',
-    operation_id='Districts List',
+    operation_id='districts_list',
     parameters=[
         province_id,
         basic_parameter,
@@ -348,7 +348,7 @@ districts_list_extend_schema = extend_schema(
 
 district_details_extend_schema = extend_schema(
     description='Get details of one district',
-    operation_id='Districts Details',
+    operation_id='district_details',
     parameters=[
         basic_parameter,
     ],
@@ -418,7 +418,7 @@ district_details_extend_schema = extend_schema(
 )
 
 wards_list_extend_schema = extend_schema(
-    operation_id='Wards List',
+    operation_id='wards_list',
     description='Get all wards in country',
     parameters=[
         province_id,
@@ -461,7 +461,7 @@ wards_list_extend_schema = extend_schema(
 )
 
 ward_details_extend_schema = extend_schema(
-    operation_id='Ward Details',
+    operation_id='ward_details',
     description='Get details of one ward',
     parameters=[
         basic_parameter,
