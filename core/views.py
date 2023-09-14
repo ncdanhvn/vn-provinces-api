@@ -8,6 +8,7 @@ from .serializers import *
 from .serializers_only_basic import *
 from .pagination import *
 from .filters import *
+from .docs_extend_schema import *
 
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,15 @@ class RegionViewSet(ReadOnlyModelViewSet):
     filter_backends = [OrderingFilter]
     ordering_fields = '__all__'
     ordering = ['id']
+
+    # For documentation generation
+    @regions_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @region_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet):
