@@ -1,5 +1,6 @@
 from django.db.models import Count, Max, Prefetch
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
+from rest_framework.mixins import ListModelMixin
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 import logging
@@ -145,6 +146,7 @@ class DistrictViewSet(ReadOnlyModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
+
 class WardViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
@@ -179,9 +181,9 @@ class WardViewSet(ReadOnlyModelViewSet):
     @ward_details_extend_schema
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
-    
 
-class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
+
+class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
     def get_queryset(self):
         queryset = Ward.objects.filter(
             district__province__id=self.kwargs['province_pk'])
