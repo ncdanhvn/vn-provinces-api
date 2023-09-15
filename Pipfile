@@ -12,6 +12,7 @@ drf-nested-routers = "*"
 django-filter = "*"
 gunicorn = "*"
 tzdata = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 pytest = "*"

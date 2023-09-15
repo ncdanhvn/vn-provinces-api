@@ -1,0 +1,975 @@
+openapi: 3.0.3
+info:
+  title: Vietnam Provinces API
+  version: 1.0.0
+  description: Public APIs for Vietnam geographical regions, provinces, districts,
+    wards and some related administration information
+paths:
+  /api/districts/:
+    get:
+      operationId: api_districts_list
+      parameters:
+      - in: query
+        name: is_border
+        schema:
+          type: boolean
+      - in: query
+        name: is_coastal
+        schema:
+          type: boolean
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: province_id
+        schema:
+          type: number
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - C
+          - RD
+          - T
+          - UD
+        description: |-
+          * `C` - City
+          * `UD` - Urban District
+          * `RD` - Rural District
+          * `T` - Town
+      - in: query
+        name: wards_count
+        schema:
+          type: number
+      - in: query
+        name: wards_count__gt
+        schema:
+          type: number
+      - in: query
+        name: wards_count__lt
+        schema:
+          type: number
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDistrictListList'
+          description: ''
+  /api/districts/{id}/:
+    get:
+      operationId: api_districts_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this district.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistrictDetails'
+          description: ''
+  /api/provinces/:
+    get:
+      operationId: api_provinces_list
+      parameters:
+      - in: query
+        name: area__gt
+        schema:
+          type: number
+      - in: query
+        name: area__lt
+        schema:
+          type: number
+      - in: query
+        name: districts_count
+        schema:
+          type: number
+      - in: query
+        name: districts_count__gt
+        schema:
+          type: number
+      - in: query
+        name: districts_count__lt
+        schema:
+          type: number
+      - in: query
+        name: is_border
+        schema:
+          type: boolean
+      - in: query
+        name: is_coastal
+        schema:
+          type: boolean
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: neighbours
+        schema:
+          type: integer
+      - in: query
+        name: number_plates
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: population__gt
+        schema:
+          type: integer
+      - in: query
+        name: population__lt
+        schema:
+          type: integer
+      - in: query
+        name: region
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - C
+          - P
+        description: |-
+          * `C` - City
+          * `P` - Province
+      - in: query
+        name: wards_count
+        schema:
+          type: number
+      - in: query
+        name: wards_count__gt
+        schema:
+          type: number
+      - in: query
+        name: wards_count__lt
+        schema:
+          type: number
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProvinceListList'
+          description: ''
+  /api/provinces/{id}/:
+    get:
+      operationId: api_provinces_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this province.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvinceDetails'
+          description: ''
+  /api/provinces/{province_pk}/wards/:
+    get:
+      operationId: api_provinces_wards_list
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: province_pk
+        schema:
+          type: string
+        required: true
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWardNoProvinceList'
+          description: ''
+  /api/provinces/{province_pk}/wards/{id}/:
+    get:
+      operationId: api_provinces_wards_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: province_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WardNoProvince'
+          description: ''
+  /api/regions/:
+    get:
+      operationId: api_regions_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegionList'
+          description: ''
+  /api/regions/{id}/:
+    get:
+      operationId: api_regions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this region.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionDetails'
+          description: ''
+  /api/wards/:
+    get:
+      operationId: api_wards_list
+      parameters:
+      - in: query
+        name: district_id
+        schema:
+          type: number
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: province_id
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - C
+          - T
+          - W
+        description: |-
+          * `W` - Ward
+          * `C` - Commune
+          * `T` - Town
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWardList'
+          description: ''
+  /api/wards/{id}/:
+    get:
+      operationId: api_wards_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ward.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ward'
+          description: ''
+components:
+  schemas:
+    DistrictDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type9f6Enum'
+        province:
+          $ref: '#/components/schemas/ProvinceShort'
+        is_border:
+          type: boolean
+        is_coastal:
+          type: boolean
+        wards_count:
+          type: integer
+        wards:
+          type: array
+          items:
+            $ref: '#/components/schemas/WardNoDistrict'
+      required:
+      - id
+      - name
+      - name_en
+      - province
+      - wards
+      - wards_count
+    DistrictList:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type9f6Enum'
+        province:
+          $ref: '#/components/schemas/ProvinceShort'
+        is_border:
+          type: boolean
+        is_coastal:
+          type: boolean
+        wards_count:
+          type: integer
+      required:
+      - id
+      - name
+      - name_en
+      - province
+      - wards_count
+    DistrictListNoProvince:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type9f6Enum'
+        is_border:
+          type: boolean
+        is_coastal:
+          type: boolean
+        wards_count:
+          type: integer
+      required:
+      - id
+      - name
+      - name_en
+      - wards_count
+    DistrictShort:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - id
+      - name
+      - name_en
+    PaginatedDistrictListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DistrictList'
+    PaginatedProvinceListList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProvinceList'
+    PaginatedWardList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ward'
+    PaginatedWardNoProvinceList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WardNoProvince'
+    ProvinceDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEa5Enum'
+        region:
+          $ref: '#/components/schemas/RegionShort'
+        area:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        population:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        number_plates:
+          type: array
+          items:
+            type: integer
+        is_border:
+          type: boolean
+        is_coastal:
+          type: boolean
+        neighbours:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProvinceShort'
+        districts_count:
+          type: integer
+        wards_count:
+          type: integer
+        districts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DistrictListNoProvince'
+      required:
+      - area
+      - districts
+      - districts_count
+      - id
+      - is_border
+      - is_coastal
+      - name
+      - name_en
+      - neighbours
+      - number_plates
+      - population
+      - region
+      - wards_count
+    ProvinceList:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEa5Enum'
+        region:
+          $ref: '#/components/schemas/RegionShort'
+        area:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        population:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        number_plates:
+          type: array
+          items:
+            type: integer
+        is_border:
+          type: boolean
+        is_coastal:
+          type: boolean
+        neighbours:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProvinceShort'
+        districts_count:
+          type: integer
+        wards_count:
+          type: integer
+      required:
+      - area
+      - districts_count
+      - id
+      - is_border
+      - is_coastal
+      - name
+      - name_en
+      - neighbours
+      - number_plates
+      - population
+      - region
+      - wards_count
+    ProvinceListNoRegion:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEa5Enum'
+        area:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        population:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        number_plates:
+          type: array
+          items:
+            type: integer
+        is_border:
+          type: boolean
+        is_coastal:
+          type: boolean
+        neighbours:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProvinceShort'
+        districts_count:
+          type: integer
+        wards_count:
+          type: integer
+      required:
+      - area
+      - districts_count
+      - id
+      - is_border
+      - is_coastal
+      - name
+      - name_en
+      - neighbours
+      - number_plates
+      - population
+      - wards_count
+    ProvinceShort:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - id
+      - name
+      - name_en
+    RegionDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          maxLength: 255
+        id:
+          type: integer
+          readOnly: true
+        provinces_count:
+          type: integer
+        provinces:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProvinceListNoRegion'
+      required:
+      - id
+      - name
+      - name_en
+      - provinces
+      - provinces_count
+    RegionList:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          maxLength: 255
+        id:
+          type: integer
+          readOnly: true
+        provinces_count:
+          type: integer
+      required:
+      - id
+      - name
+      - name_en
+      - provinces_count
+    RegionShort:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          maxLength: 255
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - id
+      - name
+      - name_en
+    Type9f6Enum:
+      enum:
+      - C
+      - UD
+      - RD
+      - T
+      type: string
+      description: |-
+        * `C` - City
+        * `UD` - Urban District
+        * `RD` - Rural District
+        * `T` - Town
+    TypeA6cEnum:
+      enum:
+      - W
+      - C
+      - T
+      type: string
+      description: |-
+        * `W` - Ward
+        * `C` - Commune
+        * `T` - Town
+    TypeEa5Enum:
+      enum:
+      - C
+      - P
+      type: string
+      description: |-
+        * `C` - City
+        * `P` - Province
+    Ward:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeA6cEnum'
+        district:
+          $ref: '#/components/schemas/DistrictShort'
+        province:
+          $ref: '#/components/schemas/ProvinceShort'
+      required:
+      - district
+      - id
+      - name
+      - name_en
+      - province
+    WardNoDistrict:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeA6cEnum'
+      required:
+      - id
+      - name
+      - name_en
+    WardNoProvince:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        name_en:
+          type: string
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeA6cEnum'
+        district:
+          $ref: '#/components/schemas/DistrictShort'
+      required:
+      - district
+      - id
+      - name
+      - name_en
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

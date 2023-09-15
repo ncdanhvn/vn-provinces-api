@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "debug_toolbar",
     'core',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +119,8 @@ REST_FRAMEWORK = {
     #     'rest_framework.renderers.JSONRenderer',
     # )
     'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': []
 }
 
 LOGGING = {
@@ -136,13 +139,67 @@ LOGGING = {
     'loggers': {
         '': {
             'handlers': ['console', 'file'],
-            'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO') # Use INFO level by default if no value in environment variables
+            # Use INFO level by default if no value in environment variables
+            'level': os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
         }
     },
     'formatters': {
         'verbose': {
             'format': '{asctime} ({levelname}) - {name} - {message}',
-            'style': '{' #str.format()
+            'style': '{'  # str.format()
         }
     }
+}
+
+
+def parameter_sort_function(p):
+    parameters_sort = [
+        'id',
+        'basic',
+        'region',
+        'province_id',
+        'district_id',
+        'type',
+        'is_border',
+        'is_coastal',
+        'number_plates',
+        'neighbours',
+        'search',
+        'ordering',
+        'page',
+        'limit',
+    ]
+
+    if p.get('required', False):
+        return 0
+
+    name = p['name']
+    if name in parameters_sort:
+        return parameters_sort.index(name)
+
+    return 100
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Vietnam Provinces API',
+    'DESCRIPTION': 'Public APIs for Vietnam geographical regions, provinces, districts, wards and some related administration information',
+    'VERSION': '1.0.1',
+    # 'CONTACT': {
+    #     'name': 'Danh Nguyen',
+    #     'email': 'ncdanhvn@gmail.com',
+    #     'github': 'https://github.com/ncdanhvn'
+    # },
+    # 'EXTERNAL_DOCS': {
+    #     'url': 'http://homepage',
+    #     'description': 'Back to homepage for general guide',
+    # },
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_SETTINGS': {
+        'defaultModelsExpandDepth': -1,
+    },
+    'SORT_OPERATIONS': False,
+    'SORT_OPERATION_PARAMETERS': parameter_sort_function,
+    'SERVE_AUTHENTICATION': None,
+    'SCHEMA_COERCE_PATH_PK_SUFFIX': True,
+    'DISABLE_ERRORS_AND_WARNINGS': True,
 }

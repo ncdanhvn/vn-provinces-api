@@ -1,5 +1,6 @@
 from django.db.models import Count, Max, Prefetch
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, GenericViewSet
+from rest_framework.mixins import ListModelMixin
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 import logging
@@ -8,6 +9,7 @@ from .serializers import *
 from .serializers_only_basic import *
 from .pagination import *
 from .filters import *
+from .docs.extend_schemas import *
 
 
 logger = logging.getLogger(__name__)
@@ -26,6 +28,15 @@ class RegionViewSet(ReadOnlyModelViewSet):
     filter_backends = [OrderingFilter]
     ordering_fields = '__all__'
     ordering = ['id']
+
+    # For documentation generation
+    @regions_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @region_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 
 class ProvinceViewSet(ReadOnlyModelViewSet):
@@ -82,6 +93,15 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
     ordering_fields = '__all__'
     ordering = ['name']
 
+    # For documentation generation
+    @provinces_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @province_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
 
 class DistrictViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
@@ -117,6 +137,15 @@ class DistrictViewSet(ReadOnlyModelViewSet):
     ordering_fields = '__all__'
     ordering = ['name']
 
+    # For documentation generation
+    @districts_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @district_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
 
 class WardViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
@@ -144,8 +173,17 @@ class WardViewSet(ReadOnlyModelViewSet):
     ordering_fields = '__all__'
     ordering = ['name']
 
+    # For documentation generation
+    @wards_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
-class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
+    @ward_details_extend_schema
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+
+class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
     def get_queryset(self):
         queryset = Ward.objects.filter(
             district__province__id=self.kwargs['province_pk'])
@@ -172,3 +210,8 @@ class WardFromAProvinceViewSet(ReadOnlyModelViewSet):
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+
+    # For documentation generation
+    @wards_nested_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
