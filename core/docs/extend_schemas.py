@@ -140,20 +140,20 @@ limit_parameter = OpenApiParameter(
     default=10,
 )
 
-province_id = OpenApiParameter(
+province_id_parameter = OpenApiParameter(
     name='province_id',
     type=OpenApiTypes.INT,
     description='Get results from a province with given id',
 )
 
-district_id = OpenApiParameter(
+district_id_parameter = OpenApiParameter(
     name='district_id',
     type=OpenApiTypes.INT,
     description='Get results from a district with given id',
 )
 
 
-def get_is_border(province_or_district):
+def get_is_border_parameter(province_or_district):
     return OpenApiParameter(
         name='is_border',
         type=OpenApiTypes.BOOL,
@@ -161,7 +161,7 @@ def get_is_border(province_or_district):
     )
 
 
-def get_is_coastal(province_or_district):
+def get_is_coastal_parameter(province_or_district):
     return OpenApiParameter(
         name='is_coastal',
         type=OpenApiTypes.BOOL,
@@ -182,8 +182,8 @@ provinces_list_extend_schema = extend_schema(
         region_parameter,
         *wards_count_parameters,
         limit_parameter,
-        get_is_border('province'),
-        get_is_coastal('province'),
+        get_is_border_parameter('province'),
+        get_is_coastal_parameter('province'),
     ],
     examples=[
         OpenApiExample(
@@ -329,12 +329,12 @@ districts_list_extend_schema = extend_schema(
     description='Get all districts in country',
     operation_id='districts_list',
     parameters=[
-        province_id,
+        province_id_parameter,
         basic_parameter,
         *wards_count_parameters,
         limit_parameter,
-        get_is_border('district'),
-        get_is_coastal('district'),
+        get_is_border_parameter('district'),
+        get_is_coastal_parameter('district'),
     ],
     examples=[
         OpenApiExample(
@@ -442,8 +442,8 @@ wards_list_extend_schema = extend_schema(
     operation_id='wards_list',
     description='Get all wards in country',
     parameters=[
-        province_id,
-        district_id,
+        province_id_parameter,
+        district_id_parameter,
         limit_parameter,
         basic_parameter,
     ],
