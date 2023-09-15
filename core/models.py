@@ -27,8 +27,8 @@ class Province(models.Model):
     TYPE_PROVINCE = 'P'     # Province - Tỉnh
 
     TYPE_CHOICES = [
-        (TYPE_CITY, 'City'),
-        (TYPE_PROVINCE, 'Province')
+        (TYPE_CITY, 'City (Thành phố)'),
+        (TYPE_PROVINCE, 'Province (Tỉnh)')
     ]
 
     type = models.CharField(
@@ -58,10 +58,10 @@ class District(models.Model):
     TYPE_TOWN = 'T'                 # Town - Thị xã
 
     TYPE_CHOICES = [
-        (TYPE_CITY, 'City'),
-        (TYPE_URBAN_DISTRICT, 'Urban District'),
-        (TYPE_RURAL_DISTRICT, 'Rural District'),
-        (TYPE_TOWN, 'Town')
+        (TYPE_CITY, 'City (Thành phố)'),
+        (TYPE_URBAN_DISTRICT, 'Urban District (Quận)'),
+        (TYPE_RURAL_DISTRICT, 'Rural District (Huyện)'),
+        (TYPE_TOWN, 'Town (Thị xã)')
     ]
 
     type = models.CharField(
@@ -88,10 +88,10 @@ class Ward(models.Model):
     TYPE_TOWN = "T"         # Town - Thị trấn
     
     TYPE_CHOICES = [
-        (TYPE_WARD, 'Ward'),
-        (TYPE_COMMUNE, 'Commune'),
-        (TYPE_TOWN, 'Town'),
-    ]  
+        (TYPE_WARD, 'Ward (Phường)'),
+        (TYPE_COMMUNE, 'Commune (Xã)'),
+        (TYPE_TOWN, 'Town (Thị trấn)'),
+    ]
 
     type = models.CharField(
         max_length=1, choices=TYPE_CHOICES, default=TYPE_WARD)
