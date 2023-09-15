@@ -153,7 +153,6 @@ LOGGING = {
 
 
 def parameter_sort_function(p):
-    name = p['name']
     parameters_sort = [
         'id',
         'basic',
@@ -168,11 +167,16 @@ def parameter_sort_function(p):
         'search',
         'ordering',
         'page',
-        'limit',        
+        'limit',
     ]
 
+    if p.get('required', False):
+        return 0
+
+    name = p['name']
     if name in parameters_sort:
         return parameters_sort.index(name)
+
     return 100
 
 

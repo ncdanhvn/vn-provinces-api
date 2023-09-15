@@ -152,6 +152,14 @@ district_id_parameter = OpenApiParameter(
     description='Get results from a district with given id',
 )
 
+wards_nested_province_id_parameter = OpenApiParameter(
+    name='province_id',
+    type=OpenApiTypes.INT,
+    location='path',
+    description='Get all wards of a province with given id',
+    required=True
+)
+
 
 def get_is_border_parameter(province_or_district):
     return OpenApiParameter(
@@ -516,6 +524,42 @@ ward_details_extend_schema = extend_schema(
                 "type": "W",
                 "district_id": 7,
                 "province_id": 1
+            }
+        ),
+    ]
+)
+
+wards_nested_list_extend_schema = extend_schema(
+    operation_id='wards_nested_province_list',
+    description='Get all wards of a province',
+    parameters=[
+        wards_nested_province_id_parameter,
+        basic_parameter,
+        limit_parameter,
+    ],
+    examples=[
+        OpenApiExample(
+            name="Full information",
+            value={
+                "name": "Bách Khoa",
+                "name_en": "Bach Khoa",
+                "id": 277,
+                "type": "W",
+                "district": {
+                    "name": "Hai Bà Trưng",
+                    "name_en": "Hai Ba Trung",
+                    "id": 7
+                }
+            }
+        ),
+        OpenApiExample(
+            name='With "basic" query',
+            value={
+                "name": "Bách Khoa",
+                "name_en": "Bach Khoa",
+                "id": 277,
+                "type": "W",
+                "district_id": 7
             }
         ),
     ]

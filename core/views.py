@@ -210,3 +210,8 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+
+    # For documentation generation
+    @wards_nested_list_extend_schema
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
