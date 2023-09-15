@@ -152,6 +152,23 @@ district_id = OpenApiParameter(
     description='Get results from a district with given id',
 )
 
+
+def get_is_border(province_or_district):
+    return OpenApiParameter(
+        name='is_border',
+        type=OpenApiTypes.BOOL,
+        description=f'Is border {province_or_district} or not'
+    )
+
+
+def get_is_coastal(province_or_district):
+    return OpenApiParameter(
+        name='is_coastal',
+        type=OpenApiTypes.BOOL,
+        description=f'Is coastal {province_or_district} or not'
+    )
+
+
 provinces_list_extend_schema = extend_schema(
     description='Get all provinces in country',
     operation_id='provinces_list',
@@ -165,6 +182,8 @@ provinces_list_extend_schema = extend_schema(
         region_parameter,
         *wards_count_parameters,
         limit_parameter,
+        get_is_border('province'),
+        get_is_coastal('province'),
     ],
     examples=[
         OpenApiExample(
@@ -314,6 +333,8 @@ districts_list_extend_schema = extend_schema(
         basic_parameter,
         *wards_count_parameters,
         limit_parameter,
+        get_is_border('district'),
+        get_is_coastal('district'),
     ],
     examples=[
         OpenApiExample(

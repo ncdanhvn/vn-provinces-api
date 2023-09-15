@@ -156,11 +156,19 @@ def parameter_sort_function(p):
     name = p['name']
     parameters_sort = [
         'id',
+        'basic',
         'region',
         'province_id',
         'district_id',
         'type',
-        'basic',
+        'is_border',
+        'is_coastal',
+        'number_plates',
+        'neighbours',
+        'search',
+        'ordering',
+        'page',
+        'limit',        
     ]
 
     if name in parameters_sort:
@@ -188,4 +196,5 @@ SPECTACULAR_SETTINGS = {
     'SORT_OPERATIONS': False,
     'SORT_OPERATION_PARAMETERS': parameter_sort_function,
     'SERVE_AUTHENTICATION': None,
+    'SCHEMA_COERCE_PATH_PK_SUFFIX': True,
 }
