@@ -72,21 +72,13 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
         if basic:
-            if self.action == 'list':
-                return ProvinceBasicSerializer
-            return ProvinceDetailsBasicSerializer
+            return ProvinceBasicSerializer if self.action == 'list' else ProvinceDetailsBasicSerializer
 
-        if self.action == 'list':
-            return ProvinceListSerializer
-        if self.action == 'retrieve':
-            return ProvinceDetailsSerializer
+        return ProvinceListSerializer if self.action == 'list' else ProvinceDetailsSerializer
 
     def filter_queryset(self, queryset):
         basic = self.request.query_params.get('basic')
-        if basic:
-            self.filterset_class = BasicProvinceFilter
-        else:
-            self.filterset_class = ProvinceFilter
+        self.filterset_class = BasicProvinceFilter if basic else ProvinceFilter
 
         return super().filter_queryset(queryset)
 
@@ -119,22 +111,14 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
-        if basic:
-            if self.action == 'list':
-                return DistrictBasicSerializer
-            return DistrictDetailsBasicSerializer
+        if basic:            
+            return DistrictBasicSerializer if self.action == 'list' else DistrictDetailsBasicSerializer
 
-        if self.action == 'list':
-            return DistrictListSerializer
-        if self.action == 'retrieve':
-            return DistrictDetailsSerializer
+        return DistrictListSerializer if self.action == 'list' else DistrictDetailsSerializer
 
     def filter_queryset(self, queryset):
         basic = self.request.query_params.get('basic')
-        if basic:
-            self.filterset_class = BasicDistrictFilter
-        else:
-            self.filterset_class = DistrictFilter
+        self.filterset_class = BasicDistrictFilter if basic else DistrictFilter
 
         return super().filter_queryset(queryset)
 
@@ -166,9 +150,7 @@ class WardViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
-        if basic:
-            return WardBasicSerializer
-        return WardSerializer
+        return WardBasicSerializer if basic else WardSerializer
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = WardFilter
@@ -201,10 +183,8 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
         return queryset.select_related('district')
 
     def get_serializer_class(self):
-        basic = self.request.query_params.get('basic')
-        if basic:
-            return WardNoProvinceBasicSerializer
-        return WardNoProvinceSerializer
+        basic = self.request.query_params.get('basic')        
+        return WardNoProvinceBasicSerializer if basic else WardNoProvinceSerializer
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter
