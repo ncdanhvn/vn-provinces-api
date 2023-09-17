@@ -41,15 +41,9 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
 class ProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
-        self.pagination_class = DefaultPagination
-        
         basic = self.request.query_params.get('basic')
         if basic:
-            self.filterset_class = BasicProvinceFilter
             return Province.objects.only('name', 'type')
-
-        # Not basic
-        self.filterset_class = ProvinceFilter
 
         if self.action == 'list':
             return Province.objects \
@@ -87,10 +81,20 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return ProvinceDetailsSerializer
 
+    def filter_queryset(self, queryset):
+        basic = self.request.query_params.get('basic')
+        if basic:
+            self.filterset_class = BasicProvinceFilter
+        else:
+            self.filterset_class = ProvinceFilter
+
+        return super().filter_queryset(queryset)
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+    pagination_class = DefaultPagination
 
     # For documentation generation
     @provinces_list_extend_schema
@@ -104,15 +108,10 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
 class DistrictViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
-        self.pagination_class = DefaultPagination
-
         basic = self.request.query_params.get('basic')
         if basic:
-            self.filterset_class = BasicDistrictFilter
             return District.objects.only('name', 'type', 'province_id')
 
-        # Not basic
-        self.filterset_class = DistrictFilter
         return District.objects \
             .select_related('province') \
             .prefetch_related('wards') \
@@ -130,10 +129,20 @@ class DistrictViewSet(ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return DistrictDetailsSerializer
 
+    def filter_queryset(self, queryset):
+        basic = self.request.query_params.get('basic')
+        if basic:
+            self.filterset_class = BasicDistrictFilter
+        else:
+            self.filterset_class = DistrictFilter
+
+        return super().filter_queryset(queryset)
+
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+    pagination_class = DefaultPagination
 
     # For documentation generation
     @districts_list_extend_schema
@@ -147,15 +156,12 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 
 class WardViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
-        self.pagination_class = DefaultPagination
-        
         basic = self.request.query_params.get('basic')
         if basic:
             return Ward.objects \
                 .select_related('district', 'district__province') \
                 .only('name', 'type', 'district_id', 'district__province__id')
 
-        # Not basic
         return Ward.objects.select_related('district', 'district__province')
 
     def get_serializer_class(self):
@@ -169,6 +175,7 @@ class WardViewSet(ReadOnlyModelViewSet):
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+    pagination_class = DefaultPagination
 
     # For documentation generation
     @wards_list_extend_schema
@@ -184,8 +191,6 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
     def get_queryset(self):
         queryset = Ward.objects.filter(
             district__province__id=self.kwargs['province_pk'])
-        
-        self.pagination_class = DefaultPagination
 
         basic = self.request.query_params.get('basic')
         if basic:
@@ -193,7 +198,6 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
                 .select_related('district', 'district__province') \
                 .only('name', 'type', 'district_id', 'district__province__id')
 
-        # Not basic
         return queryset.select_related('district')
 
     def get_serializer_class(self):
@@ -202,12 +206,12 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
             return WardNoProvinceBasicSerializer
         return WardNoProvinceSerializer
 
-    pagination_class = DefaultPagination
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter
     search_fields = ['name']
     ordering_fields = '__all__'
     ordering = ['name']
+    pagination_class = DefaultPagination
 
     # For documentation generation
     @wards_nested_list_extend_schema
