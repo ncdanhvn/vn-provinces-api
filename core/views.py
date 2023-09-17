@@ -41,15 +41,14 @@ class RegionViewSet(ReadOnlyModelViewSet):
 
 class ProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
+        self.pagination_class = DefaultPagination
+        
         basic = self.request.query_params.get('basic')
-
         if basic:
-            self.pagination_class = BasicPagination
             self.filterset_class = BasicProvinceFilter
             return Province.objects.only('name', 'type')
 
         # Not basic
-        self.pagination_class = DefaultPagination
         self.filterset_class = ProvinceFilter
 
         if self.action == 'list':
@@ -105,15 +104,14 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
 class DistrictViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
-        basic = self.request.query_params.get('basic')
+        self.pagination_class = DefaultPagination
 
+        basic = self.request.query_params.get('basic')
         if basic:
-            self.pagination_class = BasicPagination
             self.filterset_class = BasicDistrictFilter
             return District.objects.only('name', 'type', 'province_id')
 
         # Not basic
-        self.pagination_class = DefaultPagination
         self.filterset_class = DistrictFilter
         return District.objects \
             .select_related('province') \
@@ -149,16 +147,15 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 
 class WardViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
+        self.pagination_class = DefaultPagination
+        
         basic = self.request.query_params.get('basic')
-
         if basic:
-            self.pagination_class = BasicPagination
             return Ward.objects \
                 .select_related('district', 'district__province') \
                 .only('name', 'type', 'district_id', 'district__province__id')
 
         # Not basic
-        self.pagination_class = DefaultPagination
         return Ward.objects.select_related('district', 'district__province')
 
     def get_serializer_class(self):
@@ -187,15 +184,16 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
     def get_queryset(self):
         queryset = Ward.objects.filter(
             district__province__id=self.kwargs['province_pk'])
+        
+        self.pagination_class = DefaultPagination
+
         basic = self.request.query_params.get('basic')
         if basic:
-            self.pagination_class = BasicPagination
             return queryset \
                 .select_related('district', 'district__province') \
                 .only('name', 'type', 'district_id', 'district__province__id')
 
         # Not basic
-        self.pagination_class = DefaultPagination
         return queryset.select_related('district')
 
     def get_serializer_class(self):
