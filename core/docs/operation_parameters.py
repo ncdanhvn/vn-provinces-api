@@ -5,7 +5,10 @@ from drf_spectacular.types import OpenApiTypes
 basic_parameter = OpenApiParameter(
     name='basic',
     type=OpenApiTypes.BOOL,
-    description='Get response with basic information',
+    description="""
+Get response with basic information.
+<p><small>Note that 'basic' parameter can not be used with other parameters which are not included in the 'basic' query.</small></p>
+""",    
 )
 
 area_parameters = [

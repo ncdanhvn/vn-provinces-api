@@ -155,7 +155,6 @@ LOGGING = {
 def parameter_sort_function(p):
     parameters_sort = [
         'id',
-        'basic',
         'region',
         'province_id',
         'district_id',
@@ -167,6 +166,7 @@ def parameter_sort_function(p):
         'search',
         'ordering',
         'page',
+        'basic',
         'limit',
     ]
 
