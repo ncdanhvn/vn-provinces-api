@@ -138,3 +138,7 @@ GitHub.sublime-settings
 
 # personal
 tasks.txt
+
+# db
+core*.sql
+seed_db.py
