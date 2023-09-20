@@ -13,6 +13,7 @@ django-filter = "*"
 gunicorn = "*"
 tzdata = "*"
 drf-spectacular = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 pytest = "*"
