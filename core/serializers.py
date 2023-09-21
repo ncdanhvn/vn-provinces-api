@@ -6,13 +6,13 @@ from .utils.vn_to_en import remove_accents
 class ProvinceShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
-        fields = ['name', 'name_en', 'id']
+        fields = ['name', 'name_en', 'id', 'type']
 
 
 class DistrictShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['name', 'name_en', 'id']
+        fields = ['name', 'name_en', 'id', 'type']
 
 
 class WardSerializer(serializers.ModelSerializer):
