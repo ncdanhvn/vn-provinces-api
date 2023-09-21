@@ -42,6 +42,7 @@ class RegionViewSet(ReadOnlyModelViewSet):
 class ProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
+        self.filterset_class = BasicProvinceFilter if basic else ProvinceFilter
         if basic:
             return Province.objects.only('name', 'type')
 
@@ -76,12 +77,6 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
         return ProvinceListSerializer if self.action == 'list' else ProvinceDetailsSerializer
 
-    def filter_queryset(self, queryset):
-        basic = self.request.query_params.get('basic')
-        self.filterset_class = BasicProvinceFilter if basic else ProvinceFilter
-
-        return super().filter_queryset(queryset)
-
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['name']
     ordering_fields = '__all__'
@@ -101,6 +96,7 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 class DistrictViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
+        self.filterset_class = BasicDistrictFilter if basic else DistrictFilter
         if basic:
             return District.objects.only('name', 'type', 'province_id')
 
@@ -115,12 +111,6 @@ class DistrictViewSet(ReadOnlyModelViewSet):
             return DistrictBasicSerializer if self.action == 'list' else DistrictDetailsBasicSerializer
 
         return DistrictListSerializer if self.action == 'list' else DistrictDetailsSerializer
-
-    def filter_queryset(self, queryset):
-        basic = self.request.query_params.get('basic')
-        self.filterset_class = BasicDistrictFilter if basic else DistrictFilter
-
-        return super().filter_queryset(queryset)
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_fields = ['name']
