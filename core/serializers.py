@@ -2,45 +2,45 @@ from rest_framework import serializers
 from .models import Region, Province, District, Ward
 from .utils.vn_to_en import remove_accents
 
-short_fields = ['name', 'name_en', 'id', 'type']
 
-class ProvinceShortSerializer(serializers.ModelSerializer):
+class ShortSerializer(serializers.ModelSerializer):
     class Meta:
+        fields = ['name', 'name_en', 'id', 'type']
+
+
+class ProvinceShortSerializer(ShortSerializer):
+    class Meta(ShortSerializer.Meta):
         model = Province
-        fields = short_fields
 
 
-class DistrictShortSerializer(serializers.ModelSerializer):
-    class Meta:
+class DistrictShortSerializer(ShortSerializer):
+    class Meta(ShortSerializer.Meta):
         model = District
-        fields = short_fields
 
 
-class WardSerializer(serializers.ModelSerializer):
-    class Meta:
+class WardShortSerializer(ShortSerializer):
+    class Meta(ShortSerializer.Meta):
         model = Ward
-        fields = short_fields + ['district', 'province']
+
+
+class WardNoProvinceSerializer(WardShortSerializer):
+    class Meta(WardShortSerializer.Meta):
+        fields = WardShortSerializer.Meta.fields + ['district']
 
     district = DistrictShortSerializer()
+
+
+class WardSerializer(WardNoProvinceSerializer):
+    class Meta(WardNoProvinceSerializer.Meta):
+        fields = WardNoProvinceSerializer.Meta.fields + ['province']
+
     province = ProvinceShortSerializer(source='district.province')
 
 
-class WardNoDistrictSerializer(WardSerializer):
-    class Meta(WardSerializer.Meta):
-        fields = short_fields
+class DistrictListSerializer(DistrictShortSerializer):
+    class Meta(DistrictShortSerializer.Meta):
+        fields = DistrictShortSerializer.Meta.fields + ['province', 'is_border', 'is_coastal', 'wards_count']
 
-
-class WardNoProvinceSerializer(WardSerializer):
-    class Meta(WardSerializer.Meta):
-        fields = [field for field in WardSerializer.Meta.fields if field != 'province']
-
-
-class DistrictListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = District
-        fields = ['name', 'name_en', 'id', 'type',  
-                  'province', 'is_border', 'is_coastal' ,'wards_count']
-    
     wards_count = serializers.IntegerField()
     province = ProvinceShortSerializer()
 
@@ -49,12 +49,12 @@ class DistrictDetailsSerializer(DistrictListSerializer):
     class Meta(DistrictListSerializer.Meta):
         fields = DistrictListSerializer.Meta.fields + ['wards']
 
-    wards = WardNoDistrictSerializer(many=True)
+    wards = WardShortSerializer(many=True)
 
 
 class DistrictListNoProvinceSerializer(DistrictListSerializer):
     class Meta(DistrictListSerializer.Meta):
-        fields = [field for field in DistrictListSerializer.Meta.fields 
+        fields = [field for field in DistrictListSerializer.Meta.fields
                   if field != 'province']
 
     wards_count = serializers.IntegerField(source='wards.count')
@@ -65,13 +65,12 @@ class RegionShortSerializer(serializers.ModelSerializer):
         model = Region
         fields = ['name', 'name_en', 'id']
 
-    
-class ProvinceListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Province
-        fields = ['name', 'name_en', 'id', 'type', 'region', 'area', 'population', 
+
+class ProvinceListSerializer(ProvinceShortSerializer):
+    class Meta(ProvinceShortSerializer.Meta):
+        fields = ProvinceShortSerializer.Meta.fields + ['region', 'area', 'population',
                   'number_plates', 'is_border', 'is_coastal', 'neighbours', 'districts_count', 'wards_count']
-    
+
     region = RegionShortSerializer()
     is_border = serializers.BooleanField()
     is_coastal = serializers.BooleanField()
@@ -89,7 +88,7 @@ class ProvinceDetailsSerializer(ProvinceListSerializer):
 
 # class ProvinceListNoRegionSerializer(ProvinceListSerializer):
 #     class Meta(ProvinceListSerializer.Meta):
-#         fields = [field for field in ProvinceListSerializer.Meta.fields 
+#         fields = [field for field in ProvinceListSerializer.Meta.fields
 #                   if field not in['region']]
 
 
