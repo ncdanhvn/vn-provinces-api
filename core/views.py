@@ -6,7 +6,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 import logging
 from .models import Region, Province, District, Ward
 from .serializers import *
-from .serializers_only_basic import *
 from .pagination import *
 from .filters import *
 from .docs.extend_schemas import *
@@ -42,9 +41,12 @@ class RegionViewSet(ReadOnlyModelViewSet):
 class ProvinceViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
-        self.filterset_class = BasicProvinceFilter if basic else ProvinceFilter
-        if basic:
-            return Province.objects.only('name', 'type')
+        if basic and (self.action == 'list'):
+            self.filterset_class = BasicProvinceFilter 
+            return Province.objects.only('name', 'type', 'region_id')
+
+        # Not basic
+        self.filterset_class = ProvinceFilter
 
         if self.action == 'list':
             return Province.objects \
@@ -72,8 +74,8 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
-        if basic:
-            return ProvinceBasicSerializer if self.action == 'list' else ProvinceDetailsBasicSerializer
+        if basic and (self.action == 'list'):
+            return ProvinceBasicSerializer
 
         return ProvinceListSerializer if self.action == 'list' else ProvinceDetailsSerializer
 
@@ -96,9 +98,12 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 class DistrictViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
-        self.filterset_class = BasicDistrictFilter if basic else DistrictFilter
-        if basic:
+        if basic and (self.action == 'list'):
+            self.filterset_class = BasicDistrictFilter 
             return District.objects.only('name', 'type', 'province_id')
+
+        # Not basic
+        self.filterset_class = DistrictFilter
 
         return District.objects \
             .select_related('province') \
@@ -107,8 +112,8 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
-        if basic:            
-            return DistrictBasicSerializer if self.action == 'list' else DistrictDetailsBasicSerializer
+        if basic and (self.action == 'list'):           
+            return DistrictBasicSerializer
 
         return DistrictListSerializer if self.action == 'list' else DistrictDetailsSerializer
 
@@ -131,7 +136,7 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 class WardViewSet(ReadOnlyModelViewSet):
     def get_queryset(self):
         basic = self.request.query_params.get('basic')
-        if basic:
+        if basic and (self.action == 'list'):
             return Ward.objects \
                 .select_related('district', 'district__province') \
                 .only('name', 'type', 'district_id', 'district__province__id')
@@ -140,7 +145,7 @@ class WardViewSet(ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
-        return WardBasicSerializer if basic else WardSerializer
+        return WardBasicSerializer if basic and self.action =='list' else WardListSerializer
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = WardFilter
@@ -170,11 +175,11 @@ class WardFromAProvinceViewSet(ListModelMixin, GenericViewSet):
                 .select_related('district', 'district__province') \
                 .only('name', 'type', 'district_id', 'district__province__id')
 
-        return queryset.select_related('district')
+        return queryset.select_related('district', 'district__province')
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')        
-        return WardNoProvinceBasicSerializer if basic else WardNoProvinceSerializer
+        return WardBasicSerializer if basic else WardListSerializer
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = WardFilter
