@@ -2,23 +2,25 @@ from rest_framework import serializers
 from .models import Region, Province, District, Ward
 from .utils.vn_to_en import remove_accents
 
+short_fields = ['name', 'name_en', 'id', 'type']
+
 
 class ProvinceBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
-        fields = ['name', 'name_en', 'id', 'type']
+        fields = short_fields
 
 
 class DistrictBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['name', 'name_en', 'id', 'type', 'province_id']
+        fields = short_fields + ['province_id']
 
 
 class WardBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['name', 'name_en', 'id', 'type', 'district_id', 'province_id']
+        fields = short_fields + ['district_id', 'province_id']
 
     province_id = serializers.IntegerField(source='district.province.id')
 
@@ -26,24 +28,24 @@ class WardBasicSerializer(serializers.ModelSerializer):
 class DistrictNoProvinceBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['name', 'name_en', 'id', 'type']
+        fields = short_fields
 
 
 class WardNoDistrictBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['name', 'name_en', 'id', 'type']  
+        fields = short_fields
 
 
 class WardNoProvinceBasicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['name', 'name_en', 'id', 'type', 'district_id']    
+        fields =short_fields + ['district_id']    
 
 
-class ProvinceDetailsBasicSerializer(ProvinceBasicSerializer):
-    class Meta(ProvinceBasicSerializer.Meta):
-        fields = ProvinceBasicSerializer.Meta.fields + ['districts']
+class ProvinceDetailsBasicSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = short_fields + ['districts']
     
     districts = DistrictNoProvinceBasicSerializer(many=True)
 

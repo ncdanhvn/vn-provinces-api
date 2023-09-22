@@ -2,23 +2,24 @@ from rest_framework import serializers
 from .models import Region, Province, District, Ward
 from .utils.vn_to_en import remove_accents
 
+short_fields = ['name', 'name_en', 'id', 'type']
 
 class ProvinceShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Province
-        fields = ['name', 'name_en', 'id', 'type']
+        fields = short_fields
 
 
 class DistrictShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = District
-        fields = ['name', 'name_en', 'id', 'type']
+        fields = short_fields
 
 
 class WardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ward
-        fields = ['name', 'name_en', 'id', 'type', 'district', 'province']
+        fields = short_fields + ['district', 'province']
 
     district = DistrictShortSerializer()
     province = ProvinceShortSerializer(source='district.province')
@@ -26,12 +27,12 @@ class WardSerializer(serializers.ModelSerializer):
 
 class WardNoDistrictSerializer(WardSerializer):
     class Meta(WardSerializer.Meta):
-        fields = [field for field in WardSerializer.Meta.fields if field not in ['district', 'province']]
+        fields = short_fields
 
 
 class WardNoProvinceSerializer(WardSerializer):
     class Meta(WardSerializer.Meta):
-        fields = [field for field in WardSerializer.Meta.fields if field not in ['province']]
+        fields = [field for field in WardSerializer.Meta.fields if field != 'province']
 
 
 class DistrictListSerializer(serializers.ModelSerializer):
@@ -54,7 +55,7 @@ class DistrictDetailsSerializer(DistrictListSerializer):
 class DistrictListNoProvinceSerializer(DistrictListSerializer):
     class Meta(DistrictListSerializer.Meta):
         fields = [field for field in DistrictListSerializer.Meta.fields 
-                  if field not in['province']]
+                  if field != 'province']
 
     wards_count = serializers.IntegerField(source='wards.count')
 
