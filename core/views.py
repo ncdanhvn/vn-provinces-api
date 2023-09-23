@@ -47,30 +47,16 @@ class ProvinceViewSet(ReadOnlyModelViewSet):
 
         # Not basic
         self.filterset_class = ProvinceFilter
-
-        if self.action == 'list':
-            return Province.objects \
-                .select_related('region') \
-                .prefetch_related('number_plates') \
-                .prefetch_related('neighbours') \
-                .prefetch_related('districts') \
-                .annotate(
-                    districts_count=Count('districts', distinct=True),
-                    wards_count=Count('districts__wards'),
-                    is_border=Max('districts__is_border'),
-                    is_coastal=Max('districts__is_coastal'))
-
-        if self.action == 'retrieve':
-            return Province.objects \
-                .select_related('region') \
-                .prefetch_related('number_plates') \
-                .prefetch_related('neighbours') \
-                .prefetch_related('districts__wards') \
-                .annotate(
-                    districts_count=Count('districts', distinct=True),
-                    wards_count=Count('districts__wards'),
-                    is_border=Max('districts__is_border'),
-                    is_coastal=Max('districts__is_coastal'))
+        return Province.objects \
+            .select_related('region') \
+            .prefetch_related('number_plates') \
+            .prefetch_related('neighbours') \
+            .prefetch_related('districts') \
+            .annotate(
+                districts_count=Count('districts', distinct=True),
+                wards_count=Count('districts__wards'),
+                is_border=Max('districts__is_border'),
+                is_coastal=Max('districts__is_coastal'))
 
     def get_serializer_class(self):
         basic = self.request.query_params.get('basic')
@@ -104,7 +90,6 @@ class DistrictViewSet(ReadOnlyModelViewSet):
 
         # Not basic
         self.filterset_class = DistrictFilter
-
         return District.objects \
             .select_related('province') \
             .prefetch_related('wards') \
