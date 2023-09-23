@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from .models import Region, Province, District, Ward
+from .utils.class_helpers import ModelFullName
 
 
 # Model serializers
-model_fields = ['name', 'name_en', 'id', 'type']
+model_fields = ['name', 'full_name', 'name_en', 'id', 'type']
 
 
 class RegionSerializer(serializers.ModelSerializer):
@@ -12,22 +13,26 @@ class RegionSerializer(serializers.ModelSerializer):
         fields = ['name', 'name_en', 'id']
 
 
-class ProvinceSerializer(serializers.ModelSerializer):
+class ModelSerializer(serializers.ModelSerializer, ModelFullName):
     class Meta:
+        fields = model_fields
+
+    full_name = serializers.SerializerMethodField(method_name='get_full_name')
+
+
+class ProvinceSerializer(ModelSerializer):
+    class Meta(ModelSerializer.Meta):
         model = Province
-        fields = model_fields
 
 
-class DistrictSerializer(serializers.ModelSerializer):
-    class Meta:
+class DistrictSerializer(ModelSerializer):
+    class Meta(ModelSerializer.Meta):
         model = District
-        fields = model_fields
 
 
-class WardSerializer(serializers.ModelSerializer):
-    class Meta:
+class WardSerializer(ModelSerializer):
+    class Meta(ModelSerializer.Meta):
         model = Ward
-        fields = model_fields
 
 
 # Basic serializers (for views with 'basic' parameter)
