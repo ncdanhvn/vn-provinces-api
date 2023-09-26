@@ -6,9 +6,9 @@
 VN Provinces API is an open API that provides information about administrative units in Vietnam across four levels:
 
 - Region
-- Provinces
-- Districts
-- Wards
+- Province
+- District
+- Ward
 
 For more information about API usecases, documentation, please visit links below:
 
@@ -17,7 +17,7 @@ For more information about API usecases, documentation, please visit links below
 
 ## Tech Stack
 
-**Server:** Django, Rest Framework, MySQL
+**Server:** Django, Rest Framework
 
 **Databases:** MySQL
 
@@ -49,7 +49,7 @@ Please fork the repo then start pull requests.
 
 - To run API local on your machine, you need a SQL server. Download and install MySQL [here](https://dev.mysql.com/downloads/mysql/)
 
-- After install MySQL server, you will have a root user with password. Let's enter these information in development settings file at this address: `province > settings > dev.py`
+- After installing MySQL server, you will have a root user with password. Let's enter these information in development settings file at this address: `province > settings > dev.py`
 
 ```python
 DATABASES = {
@@ -63,7 +63,7 @@ DATABASES = {
 }
 ```
 
-- The last step to setup our database is create `province` database on the server we've just installed. Open mysql shell and run create database command.
+- The last step to setup our database is to create `province` database on the server which we've just installed. Open mysql shell and run create database command.
 
 ```mysql
   CREATE DATABASE myshop;
