@@ -25,7 +25,7 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css"
         />
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vuetify@3.3.17/dist/vuetify.min.js"></script>
     </head>
 
@@ -82,11 +82,7 @@
                         >
                     </div>
                     <div class="navbar__separator"></div>
-                    <a
-                        href="/en"
-                        class="navbar__small_title"
-                        >en</a
-                    >
+                    <a href="/" class="navbar__small_title">vi</a>
                 </nav>
             </div>
         </header>
@@ -95,7 +91,7 @@
             <aside id="aside" class="aside">
                 <ul>
                     <li
-                        v-for="(link, index) in links"
+                        v-for="(link, index) in linksEn"
                         @click="onActive(link)"
                         :class="{ 'aside__selected': link.active }"
                     >
@@ -105,79 +101,39 @@
             </aside>
 
             <main class="main">
-                <h1 id="intro">API Tỉnh Thành Việt Nam</h1>
+                <h1 id="intro">Vietnam Provinces API</h1>
                 <section>
                     <p>
-                        VN Provinces API là API mở nhằm cung cấp thông tin về
-                        các đơn vị hành chính ở Việt Nam qua bốn cấp độ.
+                        VN Provinces API provides
+                        information about administrative units in Vietnam across
+                        four levels:
                     </p>
                     <ul>
-                        <li>Vùng địa lý</li>
-                        <li>Cấp tỉnh</li>
-                        <li>Cấp huyện</li>
-                        <li>Cấp xã</li>
+                        <li>Region</li>
+                        <li>Province</li>
+                        <li>District</li>
+                        <li>Ward</li>
                     </ul>
-                    <p>
-                        API cũng cung cấp các dữ liệu liên quan như dân số, diện
-                        tích, giáp biển hay vùng biên giới, biển số xe, tỉnh
-                        giáp ranh...
-                    </p>
-                    <p>
-                        API Tỉnh Thành Việt Nam là dự án mã nguồn mở, mọi người
-                        có thể đóng góp cho dự án bằng cách tham gia vào
-                        repository của dự án tại địa chỉ
-                        <span class="highlight"
-                            ><a
-                                href="https://github.com/ncdanhvn/vn-provinces-api"
-                                >github</a
-                            ></span
-                        >.
-                    </p>
                 </section>
                 <section id="APIdata">
-                    <h2>Dữ Liệu</h2>
-                    <p>
-                        Các dữ liệu cung cấp bởi API được liệt kê theo bảng dưới
-                        đây
-                    </p>
+                    <h2>Data</h2>
+                    <p>See table below for all data provided by API</p>
                     <table id="data-table">
                         <tr>
                             <th></th>
-                            <th><h3>Vùng</h3></th>
-                            <th><h3>Tỉnh</h3></th>
-                            <th><h3>Huyện</h3></th>
-                            <th><h3>Xã</h3></th>
+                            <th><h3>Region</h3></th>
+                            <th><h3>Province</h3></th>
+                            <th><h3>District</h3></th>
+                            <th><h3>Ward</h3></th>
                         </tr>
                         <tr>
-                            <td>Tên</td>
+                            <td>Name</td>
                             <td>
                                 <img
                                     src="{% static 'images/circle_icon.svg' %}"
                                     alt="Check circle icon"
                                 />
                             </td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Tên đầy đủ</td>
-                            <td></td>
                             <td>
                                 <img
                                     src="{% static 'images/circle_icon.svg' %}"
@@ -198,7 +154,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Phân loại</td>
+                            <td>Full name</td>
                             <td></td>
                             <td>
                                 <img
@@ -220,89 +176,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Diện tích</td>
-                            <td></td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Dân số</td>
-                            <td></td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Biển số xe</td>
-                            <td></td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Giáp biển</td>
-                            <td></td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Giáp biên giới</td>
-                            <td></td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Tỉnh tiếp giáp</td>
-                            <td></td>
-                            <td>
-                                <img
-                                    src="{% static 'images/circle_icon.svg' %}"
-                                    alt="Check circle icon"
-                                />
-                            </td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Đơn vị trực thuộc</td>
+                            <td>Type</td>
                             <td></td>
                             <td>
                                 <img
@@ -324,7 +198,111 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Đơn vị bên dưới</td>
+                            <td>Area</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Population</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Number plates</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Is coastal</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Is border</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Neighbours</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Upper unit</td>
+                            <td></td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                            <td>
+                                <img
+                                    src="{% static 'images/circle_icon.svg' %}"
+                                    alt="Check circle icon"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Children units</td>
                             <td>
                                 <img
                                     src="{% static 'images/circle_icon.svg' %}"
@@ -348,30 +326,25 @@
                     </table>
                 </section>
                 <section id="application-1">
-                    <h2>Ứng Dụng 1: Lấy Địa Chỉ</h2>
+                    <h2>Use Case 1: Get Address</h2>
                     <p>
-                        Một trường hợp hay gặp trong các ứng dụng đó là nhập địa
-                        chỉ của người dùng. Sử dụng VN Provinces API sẽ giúp bạn
-                        phát triển ứng dụng của mình dễ dàng hơn, không cần phải
-                        xây dựng mới một API tương tự.
+                        One popular use case in applications is get user
+                        addresses. This task would become easy by using VN Provinces API.
                     </p>
-                    <h3>Lấy địa chỉ từng bước một</h3>
-                    <p>
-                        Để giúp người dùng nhập địa chỉ, cách làm có thể qua các
-                        bước sau:
-                    </p>
+                    <h3>Get address step by step</h3>
+                    <p>Getting user addresses through steps:</p>
                     <ul>
-                        <li>Lấy danh sách các tỉnh và cho người dùng chọn</li>
                         <li>
-                            Sau khi có tỉnh, lấy danh sách huyện thị để người
-                            dùng tiếp tục chọn
+                            Get provinces list, then users select their
+                            provinces
                         </li>
                         <li>
-                            Tương tự, lấy danh sách phường xã sau khi đã chọn
-                            được huyện thị.
+                            After got province, load districts of provided
+                            province
                         </li>
+                        <li>Similary, load wards after got district.</li>
                     </ul>
-                    <p>Minh họa thực tế như bên dưới.</p>
+                    <p>Example</p>
                     <!-- Demo 1 -->
                     <div id="getAddress1" class="get-address-1 demo-box">
                         <div class="get-address-1__container">
@@ -381,7 +354,7 @@
                                     item-title="name"
                                     item-value="id"
                                     variant="underlined"
-                                    placeholder="Chọn tỉnh"
+                                    placeholder="Select province"
                                     prefix="&nbsp;&nbsp;"
                                     density="compact"
                                     color="var(--color-secondary)"
@@ -392,7 +365,7 @@
                                     :model-value="province"
                                 >
                                     <template v-slot:no-data>
-                                        <div class="px-4">Chưa có dữ liệu</div>
+                                        <div class="px-4">No data yet</div>
                                     </template>
                                 </v-autocomplete>
                             </div>
@@ -402,7 +375,7 @@
                                     item-title="name"
                                     item-value="id"
                                     variant="underlined"
-                                    placeholder="Chọn huyện"
+                                    placeholder="Select district"
                                     prefix="&nbsp;&nbsp;"
                                     density="compact"
                                     color="var(--color-secondary)"
@@ -413,7 +386,7 @@
                                     :model-value="district"
                                 >
                                     <template v-slot:no-data>
-                                        <div class="px-4">Chưa có dữ liệu</div>
+                                        <div class="px-4">No data yet</div>
                                     </template>
                                 </v-autocomplete>
                             </div>
@@ -423,7 +396,7 @@
                                     item-title="name"
                                     item-value="id"
                                     variant="underlined"
-                                    placeholder="Chọn Xã"
+                                    placeholder="Select ward"
                                     prefix="&nbsp;&nbsp;"
                                     density="compact"
                                     color="var(--color-secondary)"
@@ -434,14 +407,14 @@
                                     :model-value="ward"
                                 >
                                     <template v-slot:no-data>
-                                        <div class="px-4">Chưa có dữ liệu</div>
+                                        <div class="px-4">No data yet</div>
                                     </template>
                                 </v-autocomplete>
                             </div>
                         </div>
                         <div class="address-bar">
                             <span class="address-bar__label"
-                                >Địa chỉ:&nbsp;&nbsp;</span
+                                >Address:&nbsp;&nbsp;</span
                             >
                             <span class="address-bar__content"
                                 >[[address]]</span
@@ -449,9 +422,9 @@
                         </div>
                     </div>
                     <!-- Code Blocks 1 -->
-                    <p>Để thực hiện các bước trên. Cách gọi API sẽ là:</p>
+                    <p>To do above steps, this is how to call API:</p>
                     <ul id="code-block-list" class="ul__big-gap">
-                        <li>Lấy danh sách tỉnh:</li>
+                        <li>Get provinces:</li>
                         <div class="code-block li">
                             <div class="code-block__url">
                                 [[getUrl(0)]]<span class="code-block__query"
@@ -471,19 +444,19 @@
                         </div>
                         <ul>
                             <li>
-                                Tham số
-                                <span class="code-inline">basic=true</span> để
-                                lấy danh sách với dữ liệu rút gọn.
+                                Parameter
+                                <span class="code-inline">basic=true</span> to
+                                get province with basic information.
                             </li>
                             <li>
-                                Tham số
-                                <span class="code-inline">limit=100</span> để
-                                lấy toàn bộ kết quả mà không cần chia trang
+                                Parameter
+                                <span class="code-inline">limit=100</span> to
+                                get all results without pagination
                             </li>
                         </ul>
                         <li>
-                            Lấy danh sách huyện của một tỉnh. Có hai cách gọi
-                            API như sau:
+                            Loading districts of a provided province. There are
+                            2 ways to do:
                         </li>
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -522,12 +495,12 @@
                             </div>
                         </div>
                         <p>
-                            Trong đó <span class="highlight">ID</span> là id của
-                            tỉnh cần lấy danh sách huyện.
+                            <span class="highlight">ID</span> is the id of
+                            provided province
                         </p>
                         <li>
-                            Lấy danh sách xã của một huyện. Tương tự cũng có hai
-                            cách như sau:
+                            Load wards of a provided district. Similary there
+                            are also 2 ways to call API:
                         </li>
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -566,27 +539,27 @@
                             </div>
                         </div>
                         <p>
-                            Trong đó <span class="highlight">ID</span> là id của
-                            huyện cần lấy danh sách xã
+                            <span class="highlight">ID</span> is the id of
+                            provided district
                         </p>
                         <v-snackbar v-model="snackbar" :timeout="2000">
                             Code is copied to clipboard!
                         </v-snackbar>
                     </ul>
-                    <h3>Lấy địa chỉ bằng cách tìm kiếm xã</h3>
+                    <h3>Get address by search ward name</h3>
                     <p>
-                        Ở trên đã giới thiệu cách lấy địa chỉ bằng cách nhập tất
-                        cả thông tin từ tỉnh, huyện đến xã. Một cách khác nhanh
-                        hơn để lấy địa chỉ người dùng là chỉ cần tìm kiếm xã (và
-                        huyện nếu cần thiết). Minh họa như bên dưới.
+                        Above method introduces how to get address by enter all
+                        information from province, district then ward. There is
+                        another way to achieve the same result but only need to
+                        search ward name (and district if neccessary).
                     </p>
                     <!-- Demo 2 -->
                     <ul class="ul__no-bullet">
                         <li>
                             <div id="getAddress2" class="demo-box demo-box__2">
                                 <p class="get-address-2__label">
-                                    Nhập phường xã, quận huyện cách nhau bằng
-                                    dấu phẩy
+                                    Input ward and district (separate by a
+                                    comma)
                                 </p>
                                 <div class="get-address-2__field">
                                     <v-autocomplete
@@ -602,9 +575,7 @@
                                         @update:search="onSearch"
                                     >
                                         <template v-slot:no-data>
-                                            <div class="px-4">
-                                                Chưa có dữ liệu
-                                            </div>
+                                            <div class="px-4">No data yet</div>
                                         </template>
                                     </v-autocomplete>
                                 </div>
@@ -612,7 +583,7 @@
                         </li>
                     </ul>
                     <!-- Code Blocks 2 -->
-                    <p>Với phương pháp này, cách gọi API là</p>
+                    <p>How to call API:</p>
                     <ul id="code-block-list-2" class="ul__no-bullet">
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -636,30 +607,34 @@
                         </v-snackbar>
                     </ul>
                     <p>
-                        Api sẽ trả về xã có tên cần tìm, cùng với thông tin
-                        huyện và tỉnh của xã đó.
+                        Api will return wards with the search keyword, along
+                        with their districts and provinces.
                     </p>
                     <p>
-                        Trong phần lớn trường hợp, chỉ cần tìm kiếm xã là đã có
-                        thể lấy được toàn bộ địa chỉ (gồm cả huyện và tỉnh).
-                        Trong trường hợp kết quả trả về nhiều xã có tên gần
-                        giống nhau, thì cần nhập thêm tên huyện để lọc bớt kết
-                        quả.
+                        In most scenarios, we only need to enter ward to get
+                        full address. In case of there are many return results,
+                        we would need to filter them by district.
                     </p>
                 </section>
                 <section id="application-2">
-                    <h2>Ứng Dụng 2: Tìm Kiếm Tỉnh, Vùng, Huyện, Xã</h2>
+                    <h2>
+                        Use case 2: Search provinces, regions, districts, and
+                        wards
+                    </h2>
                     <p>
-                        Ứng dụng thứ hai của API là để tìm kiếm, lọc và sắp xếp
-                        thông tin về các đơn vị hành chính ở Việt Nam.
+                        The second application of API is to search, filter and
+                        sort information about administrative units in Vietnam
                     </p>
                     <p>
-                        Bằng cách áp dụng các từ khóa và tham số tìm kiếm, API
-                        sẽ trả về kết quả mong muốn.
+                        By apply search keywords, parameters, API will return
+                        right results
                     </p>
-                    <p>Xin xem qua các ví dụ dưới đây</p>
+                    <p>Please see examples below:</p>
                     <ul id="code-block-list-3" class="ul__big-gap">
-                        <li>Tìm các thành phố trực thuộc TW ở Việt Nam</li>
+                        <li>
+                            Fill all the Central Cities in Vietnam (jurisdiction
+                            of central goverment)
+                        </li>
                         <div class="code-block li">
                             <div class="code-block__url">
                                 [[getUrl(0)]]<span class="code-block__query"
@@ -677,7 +652,7 @@
                                 /></a>
                             </div>
                         </div>
-                        <li>Tìm 5 tỉnh có diện tích lớn nhất nước</li>
+                        <li>Fill 5 largest provinces in Vietnam</li>
                         <div class="code-block li">
                             <div class="code-block__url">
                                 [[getUrl(1)]]<span class="code-block__query"
@@ -696,17 +671,16 @@
                             </div>
                         </div>
                         <p>
-                            Dùng tham số
-                            <span class="code-inline">ordering=-area</span> để
-                            sắp xếp các tỉnh theo thứ tự diện tích giảm dần. Bởi
-                            vì thứ tự sắp xếp mặc định là tăng dần, nên dùng dấu
-                            <span class="code-inline">-</span> trước tham số
-                            <span class="code-inline">area</span> để đảo thành
-                            thứ tự giảm dần. Chúng ta chỉ muốn lấy kết quả với 5
-                            tỉnh đầu tiên nên dùng tham số
+                            Use parameter
+                            <span class="code-inline">ordering=-area</span> to
+                            sort province in descending order. Because the
+                            default order is ascending, so use
+                            <span class="code-inline">-</span> before parameter
+                            <span class="code-inline">area</span> to inverse the
+                            order. We only need 5 results, so use
                             <span class="code-inline">limit=5</span>.
                         </p>
-                        <li>Biển số xe 50 là của tỉnh nào</li>
+                        <li>Which province does number plate 50 belong to</li>
                         <div class="code-block li">
                             <div class="code-block__url">
                                 [[getUrl(2)]]<span class="code-block__query"
@@ -725,8 +699,8 @@
                             </div>
                         </div>
                         <li>
-                            Trong các tỉnh tiếp giáp với Hà Nội, tỉnh nào có số
-                            dân đông nhất
+                            Among Hanoi neighbour provinces, which one is most
+                            populous
                         </li>
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -746,8 +720,8 @@
                             </div>
                         </div>
                         <li>
-                            Bạn có biết huyện nào ở nước ta vừa tiếp giáp biển,
-                            vừa có đường biên giới không?
+                            Do you know any districts in Vietnam which is both
+                            coastal and border?
                         </li>
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -767,8 +741,8 @@
                             </div>
                         </div>
                         <li>
-                            Thú vị là ở nước ta, có một số huyện mà không có xã,
-                            phường hay đơn vị bên dưới nào cả.
+                            It's interesting that in Vietnam, there are some
+                            districts which no child ward.
                         </li>
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -788,8 +762,8 @@
                             </div>
                         </div>
                         <li>
-                            Tìm kiếm tất cả vùng miền và sắp xếp theo số tỉnh
-                            của vùng đó (thứ tự giảm dần).
+                            Fill all regions in Vietnam and sort by the number
+                            of its provinces (descending order)
                         </li>
                         <div class="code-block li">
                             <div class="code-block__url">
@@ -814,11 +788,12 @@
                     </ul>
                 </section>
                 <section id="references">
-                    <h2>Nguồn tham khảo</h2>
-                    <p>Dự án dựa vào các nguồn sau để xây dựng dữ liệu:</p>
+                    <h2>References</h2>
+                    <p>Project use the data from:</p>
                     <ul>
                         <li>
-                            Đơn vị hành chính Việt Nam của Tổng Cục Thống Kê
+                            All Vietnam administrative units from the General
+                            Statistics Office website
                             <a
                                 href="https://www.gso.gov.vn/phuong-phap-luan-thong-ke/danh-muc/don-vi-hanh-chinh/"
                                 target="_blank"
@@ -831,7 +806,7 @@
                     </ul>
                     <ul>
                         <li>
-                            Danh sách tỉnh Việt Nam có giáp biển Wikipedia
+                            Vietnam coastal province by Wikipedia
                             <span class="highlight--italic">
                                 <a
                                     href="https://vi.wikipedia.org/wiki/Danh_s%C3%A1ch_t%E1%BB%89nh_Vi%E1%BB%87t_Nam_c%C3%B3_gi%C3%A1p_bi%E1%BB%83n"
@@ -861,9 +836,9 @@
                     </ul>
                     <ul>
                         <li>
-                            Danh sách các xã, phường khu vực biên giới đất liền
-                            Việt Nam, ban hành kèm theo Nghị định số
-                            34/2014/NĐ-CP ngày 29 tháng 4 năm 2014 của Chính phủ
+                            List of communes and wards in land border areas
+                            Vietnam, issued together with Decree No
+                            34/2014/ND-CP dated April 29, 2014 of the Government
                             <span class="highlight--italic">
                                 <a
                                     href="https://thuvienphapluat.vn/van-ban/Linh-vuc-khac/Nghi-dinh-34-2014-ND-CP-quy-che-khu-vuc-bien-gioi-dat-lien-nuoc-Viet-Nam-228215.aspx"
@@ -876,13 +851,13 @@
                             </span>
                         </li>
                     </ul>
-                    <h3>Xin cám ơn</h3>
+                    <h3>Credits</h3>
                     <ul>
                         <li>
-                            Icon Bánh Mỳ của La.creative - Flaticon
+                            Bread Icon of La.creative - Flaticon
                             <span class="highlight highlight--italic">
                                 <a
-                                    href="http://https://www.flaticon.com/free-icons/bread"
+                                    href="https://www.flaticon.com/free-icons/bread"
                                     title="bread icons"
                                     target="_blank"
                                     ><img

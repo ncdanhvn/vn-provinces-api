@@ -37,6 +37,39 @@ const app = createApp({
             },
         ]);
 
+        const linksEn = ref([
+            {
+                title: "Introduction",
+                target: "intro",
+                active: true,
+                scrollYBuffer: 300,
+            },
+            {
+                title: "Data",
+                target: "APIdata",
+                active: false,
+                scrollYBuffer: 0,
+            },
+            {
+                title: "Use Case 1",
+                target: "application-1",
+                active: false,
+                scrollYBuffer: 0,
+            },
+            {
+                title: "Use Case 2",
+                target: "application-2",
+                active: false,
+                scrollYBuffer: 0,
+            },
+            {
+                title: "References",
+                target: "references",
+                active: false,
+                scrollYBuffer: 600,
+            },
+        ]);
+
         const onActive = (link) => {
             isJustClickLink = true;
 
@@ -65,7 +98,7 @@ const app = createApp({
                 );
         };
 
-        return { links, onActive };
+        return { links, linksEn, onActive };
     },
     delimiters: ['[[', ']]'],
 });

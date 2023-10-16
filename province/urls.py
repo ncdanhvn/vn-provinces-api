@@ -24,6 +24,7 @@ admin.site.index_title = "Admin"
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html')),
+    path('en/', TemplateView.as_view(template_name='en.html')),
     path('admin/', admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
     path('api/', include('core.urls')),
