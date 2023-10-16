@@ -91,11 +91,11 @@
             <aside id="aside" class="aside">
                 <ul>
                     <li
-                        v-for="(link, index) in linksEn"
+                        v-for="(link, index) in links"
                         @click="onActive(link)"
                         :class="{ 'aside__selected': link.active }"
                     >
-                        [[link.title]]
+                        [[link.titleEn]]
                     </li>
                 </ul>
             </aside>

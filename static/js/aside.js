@@ -7,63 +7,35 @@ const app = createApp({
         const links = ref([
             {
                 title: "Giới Thiệu",
+                titleEn: "Introduction",
                 target: "intro",
                 active: true,
                 scrollYBuffer: 300,
             },
             {
                 title: "Dữ Liệu",
+                titleEn: "Data",
                 target: "APIdata",
                 active: false,
                 scrollYBuffer: 0,
             },
             {
                 title: "Ứng Dụng 1",
+                titleEn: "Use Case 1",
                 target: "application-1",
                 active: false,
                 scrollYBuffer: 0,
             },
             {
                 title: "Ứng Dụng 2",
+                titleEn: "Use Case 2",
                 target: "application-2",
                 active: false,
                 scrollYBuffer: 0,
             },
             {
                 title: "Tham Khảo",
-                target: "references",
-                active: false,
-                scrollYBuffer: 600,
-            },
-        ]);
-
-        const linksEn = ref([
-            {
-                title: "Introduction",
-                target: "intro",
-                active: true,
-                scrollYBuffer: 300,
-            },
-            {
-                title: "Data",
-                target: "APIdata",
-                active: false,
-                scrollYBuffer: 0,
-            },
-            {
-                title: "Use Case 1",
-                target: "application-1",
-                active: false,
-                scrollYBuffer: 0,
-            },
-            {
-                title: "Use Case 2",
-                target: "application-2",
-                active: false,
-                scrollYBuffer: 0,
-            },
-            {
-                title: "References",
+                titleEn: "References",
                 target: "references",
                 active: false,
                 scrollYBuffer: 600,
@@ -98,8 +70,8 @@ const app = createApp({
                 );
         };
 
-        return { links, linksEn, onActive };
+        return { links, onActive };
     },
-    delimiters: ['[[', ']]'],
+    delimiters: ["[[", "]]"],
 });
 app.mount("#aside");
